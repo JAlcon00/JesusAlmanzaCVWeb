@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/JAlcon00/JesusAlmanzaCVWeb/actions/workflows/ci.yml/badge.svg)](https://github.com/JAlcon00/JesusAlmanzaCVWeb/actions/workflows/ci.yml)
 
+**Live site: [jesusalmanza.netlify.app](https://jesusalmanza.netlify.app)**
+
 Personal portfolio of **Jesús Almanza**, software and data engineer and IT Manager at Olson Capital. The site presents his work building AI-powered accounting-data pipelines, cloud data warehouses and BI backends for the financial sector.
 
 Bilingual (English / Spanish), static, and built with Astro, Tailwind CSS v4, React islands and Three.js.
@@ -83,7 +85,9 @@ Design, motion and accessibility rules for contributors (human or AI) are docume
 
 `npm run build` outputs a fully static site in `dist/`, deployable to any static host (Vercel, Netlify, Cloudflare Pages or GitHub Pages).
 
-Before deploying, set your final domain in `astro.config.mjs` (`site`) and in `public/robots.txt`. The domain is used for canonical URLs, `hreflang` links and the sitemap.
+The live site is deployed on **Netlify** at https://jesusalmanza.netlify.app. Build settings live in [`netlify.toml`](netlify.toml) (build command, publish directory, Node version, cache and security headers).
+
+If you connect a custom domain, update `site` in `astro.config.mjs` and the `Sitemap:` line in `public/robots.txt`. The domain is used for canonical URLs, `hreflang` links and the sitemap.
 
 ## Credits
 

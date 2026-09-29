@@ -5,8 +5,8 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  // TODO: reemplazar por el dominio definitivo (ver context.md §6)
-  site: 'https://jesusalmanza.dev',
+  // Dirección pública actual (Netlify). Si se conecta un dominio propio, cambiarla aquí y en public/robots.txt.
+  site: 'https://jesusalmanza.netlify.app',
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'es'],

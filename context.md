@@ -72,7 +72,7 @@ public/
 ## 6. Pendientes conocidos
 
 - Imágenes de escena: YA descargadas en `src/assets/scenes/` (olson-office, plastic-omnium-plant, study-space), generadas con Canva y exportadas a resolución completa (diseño contenedor DAHWiFJcS0Y). Astro las optimiza (srcset, WebP).
-- Dominio definitivo: actualizar `site` en `astro.config.mjs` (hoy `https://jesusalmanza.dev`, placeholder) para canonical, sitemap y Open Graph.
+- Dominio propio (opcional): hoy el sitio vive en `https://jesusalmanza.netlify.app`. Si se compra un dominio, conectarlo en Netlify y actualizar `site` en `astro.config.mjs` y la línea `Sitemap:` de `public/robots.txt`.
 - Imagen Open Graph (`public/og.png`, 1200x630).
 - CV en PDF por idioma: hoy ambos idiomas descargan el mismo PDF de 2 páginas (pág. 1 inglés, pág. 2 español). Opcional: separarlo en `Jesus-Almanza-CV-en.pdf` y `-es.pdf` y apuntar `cvUrl` por idioma.
 
@@ -91,6 +91,7 @@ public/
 - 2026-09-28: Idioma por defecto cambiado a inglés por petición del dueño: `/` = inglés, `/es/` = español. x-default apunta a `/`.
 - 2026-09-28: Auditoría final (Fable 5.1): capa de scroll-storytelling (agent.md §6.3): progreso de lectura y sección activa en la nav, hero por capas que se eleva al hacer scroll, titulares palabra por palabra, cifras que cuentan, riel de Experiencia que se dibuja, imágenes con clip-reveal + parallax, CTAs magnéticos, iconos duotone. Imágenes de escena descargadas a resolución completa y activas en Experiencia y Formación. La imagen de la tarjeta DashBI fue descartada por el dueño (la tarjeta queda solo con texto).
 - 2026-09-28: Núcleo de datos 3D (petición del dueño: "un modelo 3D que rote a través de toda la página"). Three.js 0.186 en un lienzo fijo detrás del contenido (`--z-scene: -1`), cargado en diferido tras `load` + `requestIdleCallback`. Las mismas 2,400 partículas (1,200 en móvil) cambian de forma por sección: nube → cubo → barras, y rotan 1.5 vueltas a lo largo de la página. Sin WebGL no aparece; con reduced-motion se dibuja una sola vez, quieto, en forma de cubo. El panel de Contacto es translúcido (`bg-surface/55`) para que se vean las barras. Descartados: cristal facetado y pila de bases de datos.
+- 2026-09-28: Publicado en Netlify: proyecto `jesusalmanza`, URL https://jesusalmanza.netlify.app. Build definido en `netlify.toml` (npm run build → dist, Node 24, caché inmutable para `/_astro/*` y cabeceras de seguridad básicas).
 - 2026-09-28: Revelado por scroll con CSS scroll-driven animations (sin JS); las islas React quedan solo para piezas que el usuario manipula o que narran el flujo de datos.
 
 ## 7.1 Entorno: el proyecto vive en el Escritorio sincronizado con iCloud
