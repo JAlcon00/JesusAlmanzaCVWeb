@@ -1,0 +1,32 @@
+---
+import Nav from './Nav.astro';
+import Hero from './Hero.astro';
+import Profile from './Profile.astro';
+import Projects from './Projects.astro';
+import Experience from './Experience.astro';
+import Stack from './Stack.astro';
+import Education from './Education.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import DataRule from './DataRule.astro';
+import DataCore from './DataCore.astro';
+import { getContent } from '../i18n';
+
+// Composición de la portada, compartida por / (en, por defecto) y /es/ (es). El idioma sale de Astro.currentLocale.
+const c = getContent(Astro.currentLocale);
+---
+
+<DataCore />
+<Nav />
+<main id={c.ids.main}>
+  <Hero />
+  <Profile />
+  <DataRule />
+  <Projects />
+  <Experience />
+  <Stack />
+  <Education />
+  <DataRule />
+  <Contact />
+</main>
+<Footer />

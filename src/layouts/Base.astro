@@ -1,0 +1,111 @@
+---
+import '../styles/global.css';
+// Precarga de las fuentes latinas: evita el salto de layout cuando Geist sustituye a la fuente del sistema (CLS)
+import geistUrl from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+import geistMonoUrl from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
+import { getContent, homePath, locales, person } from '../i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const c = getContent(Astro.currentLocale);
+const { title = c.seo.title, description = c.seo.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternates = locales.map((l) => ({ hreflang: getContent(l).htmlLang, href: new URL(homePath(l), Astro.site) }));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: person.name,
+  jobTitle: c.person.role,
+  worksFor: { '@type': 'Organization', name: person.company },
+  email: `mailto:${person.email}`,
+  url: Astro.site?.toString(),
+  sameAs: [person.linkedin, person.github],
+  alumniOf: { '@type': 'CollegeOrUniversity', name: person.school },
+  knowsLanguage: ['es', 'en'],
+};
+---
+
+<!doctype html>
+<html lang={c.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preload" as="font" type="font/woff2" href={geistUrl} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={geistMonoUrl} crossorigin />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content={c.ogLocale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Tema antes del primer pintado: evita el flash de color incorrecto -->
+    <script is:inline>
+      (() => {
+        let stored = null;
+        try {
+          stored = localStorage.getItem('theme');
+        } catch (_) {}
+        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : system;
+      })();
+    </script>
+  </head>
+  <body class="min-h-[100dvh] overflow-x-clip">
+    <a
+      href={`#${c.ids.main}`}
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-(--z-skip) focus:rounded-full focus:bg-btn focus:px-5 focus:py-3 focus:text-btn-ink"
+    >
+      {c.ui.skip}
+    </a>
+    <slot />
+
+    <script>
+      // Botones magnéticos: el CTA se inclina hacia el cursor (feedback táctil). Solo puntero fino, sin reduced-motion.
+      const finePointer = window.matchMedia('(pointer: fine)').matches;
+      const calmMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (finePointer && !calmMotion) {
+        document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
+          el.addEventListener('pointermove', (e) => {
+            const r = el.getBoundingClientRect();
+            const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+            const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+            el.style.setProperty('--mag-x', `${(dx * 6).toFixed(1)}px`);
+            el.style.setProperty('--mag-y', `${(dy * 4).toFixed(1)}px`);
+          });
+          el.addEventListener('pointerleave', () => {
+            el.style.setProperty('--mag-x', '0px');
+            el.style.setProperty('--mag-y', '0px');
+          });
+        });
+      }
+
+      // Borde iluminado (.spotlight): escribe la posición del cursor relativa a cada tarjeta.
+      if (window.matchMedia('(pointer: fine)').matches) {
+        document.querySelectorAll<HTMLElement>('.spotlight').forEach((card) => {
+          card.addEventListener('pointermove', (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+---
+import {
+  CalendarBlankIcon as CalendarBlank,
+  MapPinIcon as MapPin,
+} from '@phosphor-icons/react/dist/ssr';
+import HighlightIcon from './HighlightIcon.astro';
+import SceneImage from './SceneImage.astro';
+import Words from './Words.astro';
+import { getContent } from '../i18n';
+
+const c = getContent(Astro.currentLocale);
+const { experience } = c;
+---
+
+<section id={c.ids.experience} aria-labelledby="exp-title" class="py-20 md:py-28">
+  <div class="container-page">
+    <p class="reveal font-mono text-xs tracking-[0.08em] text-muted uppercase">{experience.eyebrow}</p>
+    <h2
+      id="exp-title"
+      class="reveal mt-4 max-w-[20ch] text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em] text-balance"
+    >
+      <Words text={experience.heading} />
+    </h2>
+
+    <div class="relative mt-14 md:mt-20 md:pl-10">
+      <!-- Riel de la línea de tiempo: organiza los puestos y un pulso de luz lo recorre (solo desktop) -->
+      <div aria-hidden="true" class="exp-rail absolute top-0 bottom-0 left-[5px] hidden w-px bg-line-strong md:block">
+        <span class="exp-rail-fill absolute inset-0 bg-gradient-to-b from-accent to-mint"></span>
+      </div>
+
+      <ol class="flex flex-col gap-16 md:gap-24">
+        {
+          experience.roles.map((role) => {
+            const current = role.current;
+            return (
+            <li class="relative grid grid-cols-1 gap-8 border-t border-line-strong pt-8 md:grid-cols-12 md:gap-12 md:pt-10">
+              {/* Nodo: menta pulsante = puesto actual (estado real), índigo hueco = puesto anterior */}
+              <span
+                aria-hidden="true"
+                class:list={[
+                  'absolute top-[3.2rem] -left-10 hidden size-[11px] rounded-full md:block',
+                  current ? 'exp-node-live bg-mint' : 'border border-accent bg-bg',
+                ]}
+              />
+              <header class="self-start md:sticky md:top-28 md:col-span-5 lg:col-span-4">
+                <h3 class="text-3xl font-semibold tracking-[-0.03em] md:text-4xl">{role.company}</h3>
+                <p class="mt-3 text-lg">
+                  {role.title}
+                  {role.titleAlt && <span class="text-muted"> ({role.titleAlt})</span>}
+                </p>
+                <div class="mt-4 flex flex-col gap-2 font-mono text-xs text-muted">
+                  <span class="inline-flex items-center gap-2">
+                    <CalendarBlank size={14} aria-hidden="true" />
+                    {role.period}
+                  </span>
+                  <span class="inline-flex items-center gap-2">
+                    <MapPin size={14} aria-hidden="true" />
+                    {role.location}
+                  </span>
+                </div>
+                <SceneImage
+                  name={role.scene}
+                  alt={role.sceneAlt}
+                  class="mt-8 max-w-[420px]"
+                  sizes="(min-width: 1024px) 380px, (min-width: 768px) 40vw, 90vw"
+                />
+              </header>
+
+              <div class="md:col-span-7 lg:col-span-7 lg:col-start-6">
+                <p class="reveal max-w-[56ch] text-lg leading-relaxed md:text-xl">{role.intro}</p>
+                <ul class="mt-10 flex flex-col gap-7">
+                  {role.items.map((item) => (
+                    <li class="reveal flex gap-4">
+                      <span class="grid size-11 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-ink">
+                        <HighlightIcon name={item.icon} />
+                      </span>
+                      <p class="max-w-[58ch] pt-2.5 leading-relaxed text-muted">{item.text}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+            );
+          })
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .exp-node-live {
+    box-shadow: 0 0 0 4px var(--mint-soft);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .exp-node-live {
+      animation: live-pulse 2.4s ease-in-out infinite;
+    }
+  }
+</style>

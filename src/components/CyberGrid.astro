@@ -1,0 +1,52 @@
+---
+/*
+ * Piso de retícula en perspectiva (textura "cyber"). Una sola instancia: parte baja del hero.
+ * La retícula avanza hacia el espectador como un flujo de datos (solo transform).
+ * Se congela con prefers-reduced-motion.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={['cyber-grid pointer-events-none absolute inset-x-0 bottom-0 -z-10 overflow-hidden', className]}>
+  <div class="cyber-grid-plane"></div>
+</div>
+
+<style>
+  .cyber-grid {
+    height: 62%;
+    perspective: 520px;
+    perspective-origin: 50% 0%;
+    mask-image: linear-gradient(to top, black 10%, rgb(0 0 0 / 0.6) 45%, transparent 90%);
+  }
+  .cyber-grid-plane {
+    --cell: 56px;
+    position: absolute;
+    left: -60%;
+    right: -60%;
+    top: 0;
+    height: 220%;
+    transform-origin: 50% 0%;
+    transform: rotateX(64deg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: var(--cell) var(--cell);
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cyber-grid-plane {
+      animation: grid-flow 7s linear infinite;
+    }
+  }
+  @keyframes grid-flow {
+    from {
+      transform: rotateX(64deg) translateY(calc(var(--cell) * -1));
+    }
+    to {
+      transform: rotateX(64deg) translateY(0);
+    }
+  }
+</style>

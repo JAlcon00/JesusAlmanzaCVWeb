@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import { getScene } from '../lib/scenes';
+
+/*
+ * Imagen de escena optimizada por astro:assets.
+ * Busca src/assets/scenes/<name>.(jpg|jpeg|png|webp). Si no existe, no renderiza nada:
+ * nunca se muestran recuadros vacíos.
+ */
+interface Props {
+  name: string;
+  alt: string;
+  aspect?: string;
+  sizes?: string;
+  class?: string;
+  /** true: sin esquinas redondeadas (imagen a sangre dentro de una tarjeta). */
+  flush?: boolean;
+}
+
+const { name, alt, aspect = '4 / 3', sizes = '(min-width: 1024px) 400px, 90vw', class: className = '', flush = false } = Astro.props;
+
+const src = getScene(name);
+---
+
+{
+  src && (
+    <figure
+      class:list={['scene relative isolate overflow-clip bg-deep', flush ? 'rounded-none' : 'rounded-2xl', className]}
+      style={`aspect-ratio: ${aspect}; --scene-radius: ${flush ? '0px' : '1rem'}`}
+    >
+      <Image src={src} alt={alt} widths={[480, 800, 1200]} sizes={sizes} class="size-full object-cover" loading="lazy" />
+      {/* Velo de marca: unifica el tono de la foto con la paleta sin tapar el contenido */}
+      <span aria-hidden="true" class="scene-veil pointer-events-none absolute inset-0" />
+    </figure>
+  )
+}
+
+<style>
+  .scene-veil {
+    background:
+      linear-gradient(to top, rgb(15 23 42 / 0.45), transparent 55%),
+      radial-gradient(70% 60% at 100% 0%, rgb(99 102 241 / 0.18), transparent 70%);
+    mix-blend-mode: normal;
+  }
+</style>

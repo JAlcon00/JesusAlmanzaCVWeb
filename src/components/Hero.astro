@@ -1,0 +1,106 @@
+---
+import {
+  ArrowDownRightIcon as ArrowDownRight,
+  DownloadSimpleIcon as DownloadSimple,
+} from '@phosphor-icons/react/dist/ssr';
+import PipelineLive from './islands/PipelineLive';
+import Aurora from './Aurora.astro';
+import CyberGrid from './CyberGrid.astro';
+import { getContent, person } from '../i18n';
+
+const c = getContent(Astro.currentLocale);
+const { hero } = c;
+---
+
+<section id={c.ids.home} aria-labelledby="hero-title" class="relative isolate overflow-clip pt-28 pb-20 md:pt-32 md:pb-28">
+  <Aurora variant="hero" class="h-[820px] bottom-auto" />
+  <CyberGrid />
+
+  <div class="container-page">
+    <p class="hero-in hero-drift font-mono text-xs tracking-[0.08em] text-muted uppercase" style="--d: 0ms; --drift: -40%; --drift-opacity: 0">
+      <span class="sr-only">{hero.eyebrow}</span>
+      <span aria-hidden="true" data-decode={hero.eyebrow}>{hero.eyebrow}</span>
+    </p>
+
+    <h1
+      id="hero-title"
+      class="hero-in hero-drift mt-5 max-w-[18ch] text-[clamp(2.6rem,7.2vw,5.6rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance md:max-w-none"
+      style="--d: 50ms; --drift: -22%; --drift-opacity: 0"
+    >
+      {hero.lead} <span class="text-accent-ink">{hero.accent}</span>
+    </h1>
+
+    <div class="hero-drift mt-8 grid grid-cols-1 items-end gap-8 md:mt-10 md:grid-cols-12" style="--drift: -12%; --drift-opacity: 0">
+      <p class="hero-in max-w-[46ch] text-lg leading-relaxed text-muted md:col-span-7 md:text-xl" style="--d: 100ms">
+        {hero.sub}
+      </p>
+      <div class="hero-in flex flex-wrap gap-3 md:col-span-5 md:justify-end" style="--d: 150ms">
+        <a
+          href={`#${c.ids.projects}`}
+          data-magnetic
+          class="inline-flex min-h-12 items-center gap-2 rounded-full bg-btn px-6 font-medium whitespace-nowrap text-btn-ink transition-[background-color,transform] duration-300 hover:bg-btn-hover active:scale-[0.98]"
+        >
+          {c.ui.cta.projects}
+          <ArrowDownRight size={18} aria-hidden="true" />
+        </a>
+        <a
+          href={person.cvUrl}
+          download
+          class="inline-flex min-h-12 items-center gap-2 rounded-full border border-line-strong px-6 font-medium whitespace-nowrap transition-[background-color,transform] duration-300 hover:bg-surface active:scale-[0.98]"
+        >
+          <DownloadSimple size={18} aria-hidden="true" />
+          {c.ui.cta.cv}
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-in hero-drift mt-12 md:mt-16" style="--d: 200ms; --drift: -3%; --drift-scale: 0.96; --drift-opacity: 0.35">
+      <PipelineLive client:load copy={c.islands.pipeline} records={c.samples.slice(0, 6)} />
+    </div>
+  </div>
+</section>
+
+<script>
+  // Decodifica el eyebrow como un flujo de datos al cargar (una sola vez). Sin movimiento reducido.
+  const el = document.querySelector<HTMLElement>('[data-decode]');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el && !calm) {
+    const target = el.dataset.decode ?? '';
+    const glyphs = '01<>/_#%&*+=ABCDEF';
+    const duration = 1100;
+    let start = 0;
+    const tick = (now: number) => {
+      if (!start) start = now;
+      const progress = Math.min(1, (now - start) / duration);
+      const revealed = Math.floor(progress * target.length);
+      el.textContent = [...target]
+        .map((ch, i) =>
+          i < revealed || ch === ' ' ? ch : glyphs[Math.floor(Math.random() * glyphs.length)],
+        )
+        .join('');
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    };
+    setTimeout(() => requestAnimationFrame(tick), 150);
+  }
+</script>
+
+<style>
+  /* Entrada escalonada del hero: establece jerarquía de lectura (eyebrow, titular, subtexto, CTA, diagrama) */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-in {
+      animation: hero-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: var(--d, 0ms);
+    }
+  }
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

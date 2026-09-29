@@ -1,0 +1,17 @@
+---
+/*
+ * Parte un titular en palabras para el revelado escalonado (.reveal-words en global.css).
+ * El texto completo queda en un span para lectores de pantalla; las palabras animadas van aria-hidden.
+ */
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className = '' } = Astro.props;
+const words = text.split(' ');
+---
+
+<span class="sr-only">{text}</span>
+<span aria-hidden="true" class:list={['reveal-words', className]}>
+  {words.map((w, i) => <><span class="w" style={`--i: ${i}`}>{w}</span>{i < words.length - 1 ? ' ' : ''}</>)}
+</span>

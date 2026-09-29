@@ -1,0 +1,168 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { getContent, person } from '../i18n';
+
+const c = getContent(Astro.currentLocale);
+
+/*
+ * Retrato sin marco (PNG recortado en src/assets/portrait.png).
+ *   - Luz de aurora sin bordes detrás de cabeza y hombros (degradados radiales que llegan a transparente).
+ *   - La foto se desvanece hacia abajo con una máscara: el corte de la cintura nunca se ve como línea recta.
+ *   - Rim light sutil en modo oscuro para separar el traje navy del fondo.
+ *   - Parallax por capas con el puntero (--px/--py), solo puntero fino y sin reduced-motion.
+ * Rechazado por el dueño: recuadro/marco, nombre gigante y anillo detrás. No reintroducir.
+ */
+const found = import.meta.glob<{ default: ImageMetadata }>('../assets/portrait.{png,webp,jpg,jpeg}', {
+  eager: true,
+});
+const portrait = Object.values(found)[0]?.default;
+const initials = person.name
+  .split(' ')
+  .map((w) => w[0])
+  .join('');
+---
+
+<figure class="portrait relative w-full" style="aspect-ratio: 4 / 5" data-portrait>
+  <span aria-hidden="true" class="p-layer p-glow"></span>
+
+  {
+    portrait ? (
+      <div class="p-layer p-person absolute inset-0">
+        <Image
+          src={portrait}
+          alt={`${person.name}, ${c.person.role}`}
+          widths={[420, 640, 900]}
+          sizes="(min-width: 1024px) 420px, (min-width: 768px) 40vw, 360px"
+          class="p-img size-full object-cover object-top"
+          loading="lazy"
+        />
+      </div>
+    ) : (
+      <div class="absolute inset-0 grid place-items-center">
+        <span aria-hidden="true" class="font-mono text-[clamp(4rem,12vw,8rem)] font-semibold tracking-[-0.06em] text-ink">
+          {initials}
+        </span>
+        <span class="sr-only">{c.ui.monogram} {person.name}</span>
+      </div>
+    )
+  }
+</figure>
+
+<script>
+  // Parallax por capas: escribe --px/--py (-0.5..0.5) en el retrato. rAF evita trabajo extra por evento.
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (fine && !calm) {
+    document.querySelectorAll<HTMLElement>('[data-portrait]').forEach((figure) => {
+      const area = figure.closest('section') ?? figure;
+      let frame = 0;
+
+      area.addEventListener('pointermove', (event) => {
+        const e = event as PointerEvent;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          const r = figure.getBoundingClientRect();
+          const x = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / r.width));
+          const y = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / r.height));
+          figure.style.setProperty('--px', (x / 2).toFixed(3));
+          figure.style.setProperty('--py', (y / 2).toFixed(3));
+        });
+      });
+
+      area.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(frame);
+        figure.style.setProperty('--px', '0');
+        figure.style.setProperty('--py', '0');
+      });
+    });
+  }
+</script>
+
+<style>
+  .portrait {
+    --px: 0;
+    --py: 0;
+
+    /* Tokens del retrato (modo claro) */
+    --p-halo: rgb(99 102 241 / 0.22);
+    --p-halo-2: rgb(129 140 248 / 0.16);
+    --p-mint: rgb(16 185 129 / 0.1);
+    --p-rim: rgb(255 255 255 / 0);
+    --p-rim-glow: rgb(99 102 241 / 0);
+    --p-shadow: rgb(15 23 42 / 0.18);
+  }
+  :global([data-theme='dark']) .portrait {
+    --p-halo: rgb(99 102 241 / 0.42);
+    --p-halo-2: rgb(79 70 229 / 0.3);
+    --p-mint: rgb(16 185 129 / 0.14);
+    --p-rim: rgb(199 210 254 / 0.45);
+    --p-rim-glow: rgb(99 102 241 / 0.18);
+    --p-shadow: rgb(2 6 23 / 0.5);
+  }
+
+  /* Luz de aurora sin bordes: cada degradado termina en transparente antes del límite de la capa */
+  .p-glow {
+    position: absolute;
+    inset: -8% -14% 4% -14%;
+    pointer-events: none;
+    background:
+      radial-gradient(closest-side at 50% 30%, var(--p-halo), transparent),
+      radial-gradient(closest-side at 72% 18%, var(--p-halo-2), transparent),
+      radial-gradient(closest-side at 22% 62%, var(--p-mint), transparent);
+  }
+
+  /* Disolución inferior: el corte de la foto se funde con la página */
+  .p-person {
+    mask-image: linear-gradient(to bottom, black 62%, rgb(0 0 0 / 0.55) 80%, transparent 97%);
+  }
+
+  /* Blanco y negro con contraste alto para dramatismo. La escala de grises va primero:
+     las sombras y el rim light que siguen conservan el tono índigo de la marca. */
+  .p-img {
+    filter: grayscale(1) contrast(1.14) brightness(1.03) drop-shadow(0 0 0.6px var(--p-rim))
+      drop-shadow(0 -2px 10px var(--p-rim-glow)) drop-shadow(0 22px 30px var(--p-shadow));
+  }
+
+  /* Profundidad por capas: la luz se mueve en sentido contrario a la persona */
+  .p-layer {
+    --dx: 0px;
+    --dy: 0px;
+    transform: translate3d(calc(var(--px) * var(--dx)), calc(var(--py) * var(--dy)), 0);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .p-glow {
+    --dx: -24px;
+    --dy: -16px;
+  }
+  .p-person {
+    --dx: 12px;
+    --dy: 6px;
+  }
+
+  /* Al entrar en pantalla la persona sube levemente */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .p-img {
+        animation: portrait-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 45%;
+      }
+    }
+  }
+  @keyframes portrait-rise {
+    from {
+      transform: translateY(6%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .p-layer {
+      transition: none;
+    }
+  }
+</style>

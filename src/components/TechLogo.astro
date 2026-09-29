@@ -1,0 +1,33 @@
+---
+import * as simpleIcons from 'simple-icons';
+import {
+  BrainIcon as Brain,
+  ChartBarIcon as ChartBar,
+  CloudIcon as Cloud,
+  CodeIcon as Code,
+  DatabaseIcon as Database,
+} from '@phosphor-icons/react/dist/ssr';
+import type { Tech } from '../i18n/types';
+
+// Paths oficiales de simple-icons renderizados en build (no son SVG hechos a mano).
+interface Props {
+  tech: Tech;
+  size?: number;
+  class?: string;
+}
+
+const { tech, size = 18, class: className } = Astro.props;
+const icon = tech.logo ? (simpleIcons as unknown as Record<string, { path: string } | undefined>)[tech.logo] : undefined;
+const fallbacks = { code: Code, database: Database, cloud: Cloud, brain: Brain, chart: ChartBar } as const;
+const Fallback = fallbacks[tech.fallback ?? 'code'];
+---
+
+{
+  icon ? (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" class={className} fill="currentColor">
+      <path d={icon.path} />
+    </svg>
+  ) : (
+    <Fallback size={size} aria-hidden="true" className={className} />
+  )
+}

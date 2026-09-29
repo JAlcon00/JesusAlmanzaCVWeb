@@ -1,0 +1,46 @@
+---
+import {
+  ArrowsLeftRightIcon as ArrowsLeftRight,
+  BracketsCurlyIcon as BracketsCurly,
+  ChartLineUpIcon as ChartLineUp,
+  FactoryIcon as Factory,
+  GearIcon as Gear,
+  LockKeyIcon as LockKey,
+  NetworkIcon as Network,
+  ShieldCheckIcon as ShieldCheck,
+  TreeStructureIcon as TreeStructure,
+  UserFocusIcon as UserFocus,
+  UsersThreeIcon as UsersThree,
+  WrenchIcon as Wrench,
+  ChalkboardTeacherIcon as ChalkboardTeacher,
+  DatabaseIcon as Database,
+} from '@phosphor-icons/react/dist/ssr';
+
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+
+const icons = {
+  flow: ArrowsLeftRight,
+  review: UserFocus,
+  model: TreeStructure,
+  lock: LockKey,
+  api: BracketsCurly,
+  shield: ShieldCheck,
+  data: Database,
+  chart: ChartLineUp,
+  mentor: ChalkboardTeacher,
+  network: Network,
+  automation: Gear,
+  factory: Factory,
+  team: UsersThree,
+  wrench: Wrench,
+} as const;
+
+const { name, size = 20, class: className } = Astro.props;
+const Icon = icons[name as keyof typeof icons] ?? Gear;
+---
+
+<Icon size={size} weight={size >= 20 ? 'duotone' : 'regular'} aria-hidden="true" className={className} />

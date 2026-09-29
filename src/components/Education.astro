@@ -1,0 +1,73 @@
+---
+import {
+  CertificateIcon as Certificate,
+  GraduationCapIcon as GraduationCap,
+  TranslateIcon as Translate,
+} from '@phosphor-icons/react/dist/ssr';
+import SceneImage from './SceneImage.astro';
+import { getScene } from '../lib/scenes';
+import { getContent } from '../i18n';
+
+const c = getContent(Astro.currentLocale);
+const { education } = c;
+---
+
+<section id={c.ids.education} aria-labelledby="edu-title" class="py-20 md:py-28">
+  <div class="container-page grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-12">
+    <div class="reveal md:col-span-7">
+      <h2 id="edu-title" class="flex items-center gap-3 font-mono text-sm text-muted">
+        <GraduationCap size={22} weight="duotone" aria-hidden="true" className="text-accent-ink" />
+        {education.heading}
+      </h2>
+      <p class="mt-6 text-[clamp(1.9rem,4vw,3rem)] leading-[1.08] font-semibold tracking-[-0.035em] text-balance">
+        {education.degree}
+      </p>
+      <p class="mt-5 text-lg">
+        {education.school} <span class="text-muted">· {education.location}</span>
+      </p>
+      <p class="mt-4 inline-flex rounded-full border border-line-strong px-3 py-1 font-mono text-xs text-muted">
+        {education.status}
+      </p>
+
+      <h3 class="mt-10 text-sm font-medium">{education.courseworkLabel}</h3>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {education.coursework.map((c) => <li class="rounded-full bg-surface px-4 py-2 text-sm">{c}</li>)}
+      </ul>
+    </div>
+
+    <div class:list={['flex flex-col gap-4 md:col-span-5', !getScene(education.scene) && 'md:pt-14']}>
+      <SceneImage
+        name={education.scene}
+        alt={education.sceneAlt}
+        aspect="3 / 2"
+        class="reveal"
+        sizes="(min-width: 1024px) 480px, (min-width: 768px) 40vw, 90vw"
+      />
+      <div class="spotlight reveal rounded-2xl border border-line bg-surface p-6 md:p-8">
+        <h3 class="flex items-center gap-2.5 font-mono text-xs text-muted">
+          <Certificate size={18} aria-hidden="true" className="text-accent-ink" />
+          {education.certificationLabel}
+        </h3>
+        <p class="mt-4 text-xl font-semibold tracking-[-0.02em]">{education.certification.name}</p>
+        <p class="mt-1 text-muted">{education.certification.issuer}</p>
+      </div>
+
+      <div class="spotlight reveal rounded-2xl border border-line p-6 md:p-8">
+        <h3 class="flex items-center gap-2.5 font-mono text-xs text-muted">
+          <Translate size={18} aria-hidden="true" className="text-accent-ink" />
+          {education.languagesLabel}
+        </h3>
+        <dl class="mt-4 flex flex-col gap-4">
+          {
+            education.languages.map((l) => (
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-xl font-semibold tracking-[-0.02em]">{l.name}</dt>
+                <dd class="text-right text-sm text-muted">{l.level}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>

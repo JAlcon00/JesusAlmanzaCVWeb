@@ -1,0 +1,50 @@
+---
+/*
+ * Lienzo fijo del núcleo de datos 3D (ver src/lib/dataCore.ts).
+ * Three.js se carga en diferido, cuando el navegador queda libre tras mostrar la página:
+ * no afecta el LCP. Sin WebGL, el lienzo no aparece y el resto del sitio queda igual.
+ */
+---
+
+<canvas class="data-core" aria-hidden="true" data-core></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-core]');
+
+  const hasWebGL = () => {
+    try {
+      const probe = document.createElement('canvas');
+      return !!(probe.getContext('webgl2') || probe.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  };
+
+  const boot = async () => {
+    if (!canvas || !hasWebGL()) return;
+    const { startDataCore } = await import('../lib/dataCore');
+    startDataCore(canvas);
+  };
+
+  const whenIdle = (fn: () => void) =>
+    'requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 1200);
+
+  if (document.readyState === 'complete') whenIdle(boot);
+  else window.addEventListener('load', () => whenIdle(boot), { once: true });
+</script>
+
+<style>
+  .data-core {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-scene);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .data-core:global(.is-ready) {
+    opacity: 1;
+  }
+</style>

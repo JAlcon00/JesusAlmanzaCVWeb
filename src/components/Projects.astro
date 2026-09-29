@@ -1,0 +1,164 @@
+---
+import {
+  ArrowRightIcon as ArrowRight,
+} from '@phosphor-icons/react/dist/ssr';
+import HighlightIcon from './HighlightIcon.astro';
+import ConfidenceRouter from './islands/ConfidenceRouter';
+import Aurora from './Aurora.astro';
+import Words from './Words.astro';
+import { getContent } from '../i18n';
+
+const c = getContent(Astro.currentLocale);
+const { projects } = c;
+const { matchcount: mc, dashbi: db, router } = projects;
+const locale = c.locale === 'es' ? 'es-MX' : 'en-US';
+// Matriz de puntos: cada punto ≈ 10 registros reales de MatchCount. Se redondea a filas completas
+// de 34 columnas para no dejar un punto huérfano (4,762 -> 476 puntos = 14 filas, 10.004 registros por punto).
+const COLS = 34;
+const dots = Math.round(mc.stat.value / 10 / COLS) * COLS;
+---
+
+<section id={c.ids.projects} aria-labelledby="proyectos-title" class="py-20 md:py-28">
+  <div class="container-page">
+    <h2
+      id="proyectos-title"
+      class="reveal max-w-[18ch] text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em] text-balance"
+    >
+      <Words text={projects.heading} />
+    </h2>
+
+    <div class="mt-12 grid grid-cols-1 gap-4 md:mt-16 lg:grid-cols-12 lg:grid-rows-[auto_auto] lg:gap-5">
+      <!-- MatchCount: celda principal, ancla oscura en ambos temas -->
+      <article
+        aria-labelledby="mc-title"
+        class="scanlines reveal relative isolate flex flex-col overflow-clip rounded-2xl bg-deep p-6 text-deep-ink md:p-10 lg:col-span-7 lg:row-span-2"
+      >
+        <Aurora variant="panel" class="mc-aurora" />
+        <p class="font-mono text-xs text-deep-muted">{mc.kind}</p>
+        <h3 id="mc-title" class="mt-3 text-4xl font-semibold tracking-[-0.035em] md:text-5xl">{mc.name}</h3>
+        <p class="mt-4 inline-flex w-fit items-center rounded-full border border-white/15 px-3 py-1 text-xs text-deep-ink/90">
+          {mc.role}
+        </p>
+        <p class="mt-6 max-w-[48ch] text-lg leading-relaxed text-deep-ink/85">{mc.pitch}</p>
+
+        <ul class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
+          {
+            mc.highlights.map((h) => (
+              <li class="flex flex-col gap-3">
+                <span class="grid size-10 place-items-center rounded-full bg-white/[0.07] text-[#a5b4fc]">
+                  <HighlightIcon name={h.icon} />
+                </span>
+                <p class="text-sm leading-relaxed text-deep-muted">{h.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Solo escritorio: rellena el alto que deja la columna derecha con la cifra real del proyecto -->
+        <figure class="mt-12 hidden flex-1 flex-col justify-center gap-6 lg:flex">
+          <div class="flex items-end gap-5">
+            <p class="font-mono text-6xl leading-none font-medium tracking-[-0.04em] text-[#34d399] tabular-nums">
+              <span data-count={mc.stat.value} data-locale={locale}>{mc.stat.value.toLocaleString(locale)}</span>
+            </p>
+            <p class="max-w-[30ch] pb-1 text-sm leading-snug text-deep-muted">{mc.stat.label}</p>
+          </div>
+          <div aria-hidden="true" class="mc-dots grid gap-[7px]">
+            {Array.from({ length: dots }, () => <span class="mc-dot" />)}
+          </div>
+          <figcaption class="font-mono text-[11px] text-deep-muted">{mc.stat.legend}</figcaption>
+        </figure>
+
+        <ul class="mt-auto flex flex-wrap gap-2 pt-10" aria-label={c.ui.techOf(mc.name)}>
+          {
+            mc.tech.map((t) => (
+              <li class="rounded-full border border-white/12 px-3 py-1.5 font-mono text-xs text-deep-ink/85">{t}</li>
+            ))
+          }
+        </ul>
+      </article>
+
+      <!-- DashBI -->
+      <article
+        aria-labelledby="db-title"
+        class="spotlight reveal flex flex-col rounded-2xl border border-line bg-surface p-6 md:p-8 lg:col-span-5"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="font-mono text-xs text-muted">{db.kind}</p>
+            <h3 id="db-title" class="mt-2 text-3xl font-semibold tracking-[-0.03em]">{db.name}</h3>
+          </div>
+          <p class="shrink-0 rounded-full border border-line-strong px-3 py-1 text-xs text-muted">{db.role}</p>
+        </div>
+        <p class="mt-4 leading-relaxed text-muted">{db.pitch}</p>
+        <ul class="mt-6 flex flex-col gap-4">
+          {
+            db.highlights.map((h) => (
+              <li class="flex gap-3">
+                <HighlightIcon name={h.icon} class="mt-0.5 shrink-0 text-accent-ink" />
+                <p class="text-sm leading-relaxed">{h.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="mt-6 flex flex-wrap gap-2" aria-label={c.ui.techOf(db.name)}>
+          {db.tech.map((t) => <li class="rounded-full bg-bg px-3 py-1.5 font-mono text-xs text-muted">{t}</li>)}
+        </ul>
+      </article>
+
+      <!-- Demo interactiva del umbral -->
+      <article
+        aria-labelledby="router-title"
+        class="dot-grid spotlight reveal flex flex-col gap-5 rounded-2xl border border-line bg-bg p-6 md:p-8 lg:col-span-5"
+      >
+        <div>
+          <h3 id="router-title" class="text-xl font-semibold tracking-[-0.02em]">{router.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">{router.body}</p>
+        </div>
+        <div class="hud rounded-2xl border border-line bg-bg/90 p-4 md:p-6">
+          <ConfidenceRouter client:visible copy={c.islands.router} accounts={c.samples} />
+        </div>
+        <p class="flex items-center gap-2 font-mono text-[11px] text-muted">
+          <ArrowRight size={12} aria-hidden="true" />
+          {router.note}
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* El tile es navy en ambos temas: la aurora usa la intensidad del modo oscuro */
+  /* 34 columnas: 477 puntos = 14 filas; los puntos se "encienden" de izquierda a derecha al entrar en pantalla */
+  .mc-dots {
+    grid-template-columns: repeat(34, minmax(0, 1fr));
+  }
+  .mc-dot {
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    background: rgb(52 211 153 / 0.75);
+    box-shadow: 0 0 6px rgb(52 211 153 / 0.35);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .mc-dots {
+        animation: dots-sweep linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+    }
+  }
+  @keyframes dots-sweep {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  .mc-aurora {
+    --a-indigo: rgb(99 102 241 / 0.5);
+    --a-violet: rgb(79 70 229 / 0.45);
+    --a-mint: rgb(16 185 129 / 0.2);
+  }
+</style>

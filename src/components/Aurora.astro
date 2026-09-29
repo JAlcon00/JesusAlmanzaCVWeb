@@ -1,0 +1,177 @@
+---
+/*
+ * Aurora de marca: capas de degradados radiales difuminados que derivan lentamente.
+ * Solo CSS (transform + opacity), sin JS ni librerías. Se congela con prefers-reduced-motion.
+ * Colores exclusivamente de la paleta (índigo acento, menta semántico, navy estructura).
+ *
+ * variant:
+ *  - hero:  cortina amplia detrás del hero; se desvanece al hacer scroll (scroll-driven).
+ *  - panel: dentro de un contenedor con overflow-hidden (tiles, paneles).
+ *  - band:  franja horizontal suave detrás de un bloque de contenido.
+ */
+interface Props {
+  variant?: 'hero' | 'panel' | 'band';
+  class?: string;
+}
+
+const { variant = 'panel', class: className = '' } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={['aurora pointer-events-none absolute inset-0 -z-10 overflow-hidden', `aurora--${variant}`, className]}>
+  <span class="aurora-blob aurora-blob--a"></span>
+  <span class="aurora-blob aurora-blob--b"></span>
+  <span class="aurora-blob aurora-blob--c"></span>
+  <span class="aurora-ribbon"></span>
+</div>
+
+<style>
+  .aurora {
+    --a-indigo: rgb(99 102 241 / 0.34);
+    --a-violet: rgb(129 140 248 / 0.26);
+    --a-mint: rgb(16 185 129 / 0.16);
+    --a-ribbon: rgb(99 102 241 / 0.18);
+    isolation: isolate;
+  }
+
+  :global([data-theme='dark']) .aurora {
+    --a-indigo: rgb(99 102 241 / 0.42);
+    --a-violet: rgb(79 70 229 / 0.4);
+    --a-mint: rgb(16 185 129 / 0.2);
+    --a-ribbon: rgb(129 140 248 / 0.22);
+  }
+
+  /* Sin filter: blur (Chrome recorta el desenfoque en los bordes de la capa y deja cortes visibles).
+     La suavidad viene del propio degradado radial, que llega a transparente antes del borde. */
+  .aurora-blob,
+  .aurora-ribbon {
+    position: absolute;
+    will-change: transform;
+  }
+
+  .aurora-blob--a {
+    width: 52%;
+    aspect-ratio: 1.3;
+    top: -18%;
+    right: -8%;
+    background: radial-gradient(closest-side, var(--a-indigo), rgb(99 102 241 / 0.08) 55%, transparent);
+    animation: drift-a 26s ease-in-out infinite alternate;
+  }
+  .aurora-blob--b {
+    width: 42%;
+    aspect-ratio: 1.6;
+    top: 8%;
+    right: 26%;
+    background: radial-gradient(closest-side, var(--a-violet), rgb(99 102 241 / 0.05) 60%, transparent);
+    animation: drift-b 32s ease-in-out infinite alternate;
+  }
+  .aurora-blob--c {
+    width: 36%;
+    aspect-ratio: 1.5;
+    top: 22%;
+    left: -10%;
+    background: radial-gradient(closest-side, var(--a-mint), transparent);
+    animation: drift-c 38s ease-in-out infinite alternate;
+  }
+  /* Cinta diagonal: la "cortina" característica de una aurora */
+  .aurora-ribbon {
+    width: 90%;
+    height: 22%;
+    top: 4%;
+    left: 20%;
+    background:
+      radial-gradient(closest-side at 38% 50%, var(--a-ribbon), transparent),
+      radial-gradient(closest-side at 70% 50%, var(--a-mint), transparent);
+    transform: rotate(-12deg);
+    animation: ribbon 22s ease-in-out infinite alternate;
+    opacity: 0.8;
+  }
+
+  /* Hero: fundido inferior para no competir con el contenido */
+  .aurora--hero {
+    mask-image: linear-gradient(to bottom, black 45%, transparent 95%);
+  }
+
+  /* Panel: blobs más compactos y concentrados arriba a la derecha */
+  .aurora--panel .aurora-blob--a {
+    width: 80%;
+    top: -35%;
+    right: -25%;
+  }
+  .aurora--panel .aurora-blob--b {
+    width: 60%;
+    top: -10%;
+    right: 10%;
+  }
+  .aurora--panel .aurora-blob--c {
+    width: 60%;
+    top: auto;
+    bottom: -30%;
+    left: -20%;
+  }
+  .aurora--panel .aurora-ribbon {
+    display: none;
+  }
+
+  /* Band: franja centrada y tenue */
+  .aurora--band {
+    mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+  }
+  .aurora--band .aurora-blob--a {
+    top: 10%;
+    right: 5%;
+  }
+  .aurora--band .aurora-blob--c {
+    top: 25%;
+    left: 5%;
+  }
+  .aurora--band .aurora-ribbon {
+    top: 38%;
+    left: 5%;
+  }
+
+  @keyframes drift-a {
+    to {
+      transform: translate3d(-12%, 10%, 0) scale(1.15) rotate(8deg);
+    }
+  }
+  @keyframes drift-b {
+    to {
+      transform: translate3d(14%, -8%, 0) scale(0.9) rotate(-10deg);
+    }
+  }
+  @keyframes drift-c {
+    to {
+      transform: translate3d(18%, -12%, 0) scale(1.2);
+    }
+  }
+  @keyframes ribbon {
+    to {
+      transform: rotate(-4deg) translate3d(-8%, 14%, 0) scaleX(1.1);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-blob,
+    .aurora-ribbon {
+      animation: none;
+    }
+  }
+
+  /* Hero: la aurora se eleva y se desvanece mientras el usuario deja el hero (profundidad al hacer scroll) */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .aurora--hero {
+        animation: aurora-exit linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 90vh;
+      }
+    }
+  }
+  @keyframes aurora-exit {
+    to {
+      opacity: 0.25;
+      transform: translate3d(0, -12%, 0);
+    }
+  }
+</style>

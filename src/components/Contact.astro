@@ -1,0 +1,102 @@
+---
+import {
+  ArrowUpRightIcon as ArrowUpRight,
+  DownloadSimpleIcon as DownloadSimple,
+  EnvelopeSimpleIcon as EnvelopeSimple,
+  GithubLogoIcon as GithubLogo,
+  LinkedinLogoIcon as LinkedinLogo,
+  PhoneIcon as Phone,
+} from '@phosphor-icons/react/dist/ssr';
+import CopyEmail from './islands/CopyEmail';
+import Aurora from './Aurora.astro';
+import Words from './Words.astro';
+import { getContent, mailtoHref, person } from '../i18n';
+
+const c = getContent(Astro.currentLocale);
+const { contact } = c;
+
+const links = [
+  { href: person.linkedin, label: person.linkedinLabel, icon: LinkedinLogo, external: true },
+  { href: person.github, label: person.githubLabel, icon: GithubLogo, external: true },
+  { href: person.phoneHref, label: person.phone, icon: Phone, external: false },
+];
+---
+
+<section id={c.ids.contact} aria-labelledby="contact-title" class="py-20 md:py-28">
+  <div class="container-page">
+    <div class="hud reveal relative isolate overflow-clip rounded-2xl border border-line bg-surface/55 px-6 py-14 md:px-14 md:py-20">
+      <Aurora variant="panel" class="contact-aurora" />
+      <p class="font-mono text-xs tracking-[0.08em] text-muted uppercase">{contact.eyebrow}</p>
+      <h2
+        id="contact-title"
+        class="mt-5 max-w-[20ch] text-[clamp(2.2rem,5.5vw,4.5rem)] leading-[1.03] font-semibold tracking-[-0.04em] text-balance"
+      >
+        <Words text={contact.headline} />
+      </h2>
+      <p class="mt-6 max-w-[50ch] text-lg leading-relaxed text-muted">{contact.body}</p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        <a
+          href={mailtoHref(c)}
+          data-magnetic
+          class="inline-flex min-h-12 items-center gap-2 rounded-full bg-btn px-6 font-medium whitespace-nowrap text-btn-ink transition-[background-color,transform] duration-300 hover:bg-btn-hover active:scale-[0.98]"
+        >
+          <EnvelopeSimple size={18} aria-hidden="true" />
+          {c.ui.cta.contact}
+        </a>
+        <CopyEmail client:visible email={person.email} copy={c.islands.copyEmail} />
+      </div>
+      <a
+        href={mailtoHref(c)}
+        class="mt-4 inline-flex min-h-11 items-center font-mono text-sm text-muted underline decoration-line-strong underline-offset-4 transition-colors duration-300 hover:text-ink hover:decoration-accent"
+      >
+        {person.email}
+      </a>
+
+      <ul class="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          links.map(({ href, label, icon: Icon, external }) => (
+            <li>
+              <a
+                href={href}
+                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                class="spotlight group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-line bg-bg px-4 text-sm transition-colors duration-300 hover:border-line-strong"
+              >
+                <span class="flex min-w-0 items-center gap-3">
+                  <Icon size={22} weight="duotone" aria-hidden="true" className="shrink-0 text-accent-ink" />
+                  <span class="truncate">{label}</span>
+                </span>
+                <ArrowUpRight
+                  size={16}
+                  aria-hidden="true"
+                  className="shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+                {external && <span class="sr-only">{c.ui.newTab}</span>}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href={person.cvUrl}
+            download
+            class="spotlight group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-line bg-bg px-4 text-sm transition-colors duration-300 hover:border-line-strong"
+          >
+            <span class="flex items-center gap-3">
+              <DownloadSimple size={22} weight="duotone" aria-hidden="true" className="text-accent-ink" />
+              {c.ui.cta.cv}
+            </span>
+            <span class="font-mono text-xs text-muted">PDF</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Aurora anclada abajo a la derecha, lejos del titular, para no reducir contraste */
+  .contact-aurora {
+    transform: scaleY(-1);
+  }
+</style>

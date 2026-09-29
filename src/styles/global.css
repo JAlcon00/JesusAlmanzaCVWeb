@@ -1,0 +1,478 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+/* Tema manual o por sistema: <html data-theme="light|dark"> lo fija el script de Base.astro */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * Tokens de la paleta del dueño (ver agent.md §3).
+ * Los derivados (#4F46E5, #047857, #94A3B8...) existen solo para cumplir contraste WCAG AA.
+ */
+:root {
+  --bg: #f8fafc;
+  --surface: #f1f5f9;
+  --surface-strong: #e2e8f0;
+  --ink: #0f172a;
+  --muted: #475569;
+  --line: rgb(15 23 42 / 0.1);
+  --line-strong: rgb(15 23 42 / 0.18);
+
+  --accent: #6366f1;
+  --accent-ink: #4f46e5;
+  --accent-soft: rgb(99 102 241 / 0.1);
+  --btn: #4f46e5;
+  --btn-hover: #4338ca;
+  --btn-ink: #f8fafc;
+
+  --mint: #10b981;
+  --mint-ink: #047857;
+  --mint-display: #059669;
+  --mint-soft: rgb(16 185 129 / 0.12);
+
+  /* Tile de énfasis: navy en ambos temas para dar ancla visual */
+  --deep: #0f172a;
+  --deep-ink: #f8fafc;
+  --deep-muted: #94a3b8;
+
+  --shadow-tint: 15 23 42;
+
+  /* Escala z-index (agent.md §4). Único lugar donde se definen capas. */
+  --z-scene: -1; /* núcleo de datos 3D: encima del fondo de la página, debajo de todo el contenido */
+  --z-grain: 30;
+  --z-nav: 40;
+  --z-skip: 50;
+
+  /* Sistema de texturas cyber-aurora (ver agent.md §6.2) */
+  --grain-opacity: 0.05;
+  --grid-line: rgb(79 70 229 / 0.16);
+  --hud: rgb(79 70 229 / 0.55);
+  --spot: rgb(99 102 241 / 0.55);
+  --scan: rgb(255 255 255 / 0.035);
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #162033;
+  --surface-strong: #1e293b;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --line: rgb(248 250 252 / 0.08);
+  --line-strong: rgb(248 250 252 / 0.16);
+
+  --accent: #6366f1;
+  --accent-ink: #a5b4fc;
+  --accent-soft: rgb(99 102 241 / 0.16);
+
+  --mint-ink: #34d399;
+  --mint-display: #34d399;
+  --mint-soft: rgb(16 185 129 / 0.14);
+
+  --deep: #0b1222;
+  --deep-ink: #f8fafc;
+  --deep-muted: #94a3b8;
+
+  --shadow-tint: 2 6 23;
+
+  --grain-opacity: 0.07;
+  --grid-line: rgb(129 140 248 / 0.18);
+  --hud: rgb(165 180 252 / 0.6);
+  --spot: rgb(129 140 248 / 0.7);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-btn: var(--btn);
+  --color-btn-hover: var(--btn-hover);
+  --color-btn-ink: var(--btn-ink);
+  --color-mint: var(--mint);
+  --color-mint-ink: var(--mint-ink);
+  --color-mint-display: var(--mint-display);
+  --color-mint-soft: var(--mint-soft);
+  --color-deep: var(--deep);
+  --color-deep-ink: var(--deep-ink);
+  --color-deep-muted: var(--deep-muted);
+
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #f8fafc;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .shadow-tinted {
+    box-shadow:
+      0 1px 0 rgb(var(--shadow-tint) / 0.04),
+      0 24px 48px -24px rgb(var(--shadow-tint) / 0.22);
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+}
+
+/* Revelado al entrar en viewport: CSS scroll-driven, cero JS. Sin soporte = contenido estático visible. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Marquee único de la página (Stack). Se detiene con hover/foco y con reduced motion. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track {
+    animation: marquee 48s linear infinite;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    width: 100%;
+  }
+  .marquee-track > ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .marquee-track > [aria-hidden="true"] {
+    display: none;
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(calc(-50% - 1.75rem));
+  }
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .live-dot {
+    animation: live-pulse 2.4s ease-in-out infinite;
+  }
+}
+
+/* ============================================================
+   Sistema de texturas "cyber-aurora"
+   Límites de uso en agent.md §6.2. Todo respeta reduced-motion.
+   ============================================================ */
+
+/* 1. Grano de película: una sola capa fija, sin animación, sin eventos */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 3. Corchetes HUD: marcas de visor en las 4 esquinas (máx. 3 superficies) */
+.hud {
+  position: relative;
+}
+.hud::after {
+  --l: 14px;
+  --t: 1.5px;
+  content: '';
+  position: absolute;
+  inset: 10px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--hud), var(--hud)) top left / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) top left / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) top right / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) top right / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) bottom left / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) bottom left / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) bottom right / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--hud), var(--hud)) bottom right / var(--t) var(--l) no-repeat;
+}
+
+/* 4. Scanlines CRT: solo en superficies navy (tile de MatchCount). Debajo del contenido, encima de la aurora. */
+.scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, var(--scan) 0 1px, transparent 1px 4px);
+}
+
+/* 5. Borde iluminado que sigue al cursor (--mx/--my los escribe Base.astro) */
+.spotlight {
+  position: relative;
+}
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), var(--spot), transparent 65%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.spotlight:hover::before,
+.spotlight:focus-within::before {
+  opacity: 1;
+}
+
+/* 8. Regla de datos: línea con un pulso de luz que la recorre (máx. 2 por página) */
+.data-rule {
+  position: relative;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+.data-rule::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 40%, var(--accent) 48%, var(--mint) 52%, transparent 60%);
+  transform: translateX(-100%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .data-rule::after {
+    animation: data-rule 6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+@keyframes data-rule {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================================
+   Capa de scroll-storytelling (auditoría final 2026-09-28)
+   Todo con CSS scroll-driven animations; sin listeners de scroll.
+   Sin soporte o con reduced-motion, el contenido queda estático y completo.
+   ============================================================ */
+
+/* Titulares que se revelan palabra por palabra al entrar (jerarquía de lectura). */
+.reveal-words > .w {
+  display: inline-block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-words > .w {
+      animation: word-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+      animation-delay: calc(var(--i, 0) * 12ms);
+    }
+  }
+}
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em) rotate(2deg);
+    filter: blur(6px);
+  }
+  60% {
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* Imágenes de escena: se descubren (clip) al entrar y hacen parallax mientras cruzan la pantalla. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .scene {
+      animation: scene-unclip linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 75%;
+    }
+    .scene > img {
+      animation: scene-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@keyframes scene-unclip {
+  from {
+    clip-path: inset(14% 6% 14% 6% round var(--scene-radius, 1rem));
+    opacity: 0.6;
+  }
+  to {
+    clip-path: inset(0 0 0 0 round var(--scene-radius, 1rem));
+    opacity: 1;
+  }
+}
+@keyframes scene-drift {
+  from {
+    transform: scale(1.14) translateY(-4%);
+  }
+  to {
+    transform: scale(1.14) translateY(4%);
+  }
+}
+
+/* Hero: al hacer scroll, cada capa se eleva a distinta velocidad (profundidad), y se desvanece */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .hero-drift {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+  }
+}
+@keyframes hero-drift {
+  to {
+    transform: translateY(calc(var(--drift, -10%) * 1)) scale(var(--drift-scale, 1));
+    opacity: var(--drift-opacity, 0.2);
+  }
+}
+
+/* Barra de progreso de lectura en la nav (orientación). */
+.nav-progress {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+@supports (animation-timeline: scroll()) {
+  .nav-progress {
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Riel de Experiencia: se "dibuja" conforme se lee la sección. */
+.exp-rail-fill {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .exp-rail-fill {
+      animation: rail-fill linear both;
+      animation-timeline: view();
+      animation-range: entry 30% exit 70%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .exp-rail-fill {
+    transform: none;
+  }
+}
+@keyframes rail-fill {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Botones magnéticos: la posición la escribe Base.astro (--mx/--my en px). */
+[data-magnetic] {
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
