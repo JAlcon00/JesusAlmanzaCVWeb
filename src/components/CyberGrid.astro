@@ -10,7 +10,10 @@ interface Props {
 const { class: className = '' } = Astro.props;
 ---
 
-<div aria-hidden="true" class:list={['cyber-grid pointer-events-none absolute inset-x-0 bottom-0 -z-10 overflow-hidden', className]}>
+<div
+  aria-hidden="true"
+  class:list={['cyber-grid pointer-events-none absolute inset-x-0 bottom-0 -z-10 overflow-hidden', className]}
+>
   <div class="cyber-grid-plane"></div>
 </div>
 

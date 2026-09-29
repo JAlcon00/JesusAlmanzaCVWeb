@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import {
-  CheckIcon as Check,
-  CopyIcon as Copy,
-  WarningCircleIcon as WarningCircle,
-} from '@phosphor-icons/react';
+import { CheckIcon as Check, CopyIcon as Copy, WarningCircleIcon as WarningCircle } from '@phosphor-icons/react';
 
 import { fill } from '../../i18n/fill';
 import type { CopyEmailCopy } from '../../i18n/types';

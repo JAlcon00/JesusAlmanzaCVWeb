@@ -1,5 +1,32 @@
+# Dependencias y builds
+node_modules/
 dist/
 .astro/
-node_modules/
+
+# Variables de entorno (nunca se suben)
 .env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Sistema operativo y editores
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Configuración local de herramientas (no forma parte del proyecto)
+.claude/
+
+# Material de origen que se queda solo en la máquina local:
+# - la foto original sin recortar (el sitio usa src/assets/portrait.png)
+# - la copia del CV en la raíz (la publicada vive en public/cv/)
+src/assets/JesusAlmanzaIMG.png
+/CV Jesús Almanza.pdf

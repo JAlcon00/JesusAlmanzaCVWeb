@@ -34,7 +34,14 @@ export type PipelineCopy = {
   titleSuffix: string;
   pause: string;
   resume: string;
-  stages: { erp: [string, string]; agent: [string, string]; gate: [string, string]; review: [string, string]; dw: [string, string]; bi: [string, string] };
+  stages: {
+    erp: [string, string];
+    agent: [string, string];
+    gate: [string, string];
+    review: [string, string];
+    dw: [string, string];
+    bi: [string, string];
+  };
   confidence: string;
   autoApproved: string;
   needsReview: string;
@@ -60,7 +67,16 @@ export type SiteContent = {
   locale: Locale;
   htmlLang: string;
   ogLocale: string;
-  ids: { main: string; home: string; profile: string; projects: string; experience: string; stack: string; education: string; contact: string };
+  ids: {
+    main: string;
+    home: string;
+    profile: string;
+    projects: string;
+    experience: string;
+    stack: string;
+    education: string;
+    contact: string;
+  };
   seo: { title: string; description: string };
   person: { role: string; location: string };
   ui: {

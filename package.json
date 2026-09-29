@@ -1,12 +1,29 @@
 {
   "name": "jesus-almanza-cv-web",
-  "type": "module",
   "version": "1.0.0",
+  "description": "Bilingual portfolio of Jesús Almanza, software and data engineer. Astro, Tailwind CSS v4, React islands and Three.js.",
+  "author": "Jesús Almanza (https://github.com/JAlcon00)",
+  "license": "UNLICENSED",
   "private": true,
+  "type": "module",
+  "homepage": "https://github.com/JAlcon00/JesusAlmanzaCVWeb#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JAlcon00/JesusAlmanzaCVWeb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JAlcon00/JesusAlmanzaCVWeb/issues"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "astro": "astro"
   },
   "dependencies": {
@@ -29,6 +46,9 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/three": "^0.186.0",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3"
   }
 }

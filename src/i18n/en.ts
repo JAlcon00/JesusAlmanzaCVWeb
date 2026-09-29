@@ -147,7 +147,10 @@ export const en: SiteContent = {
             icon: 'data',
             text: 'I built MatchCount and develop the DashBI backend: the chain that carries accounting data from the ERP to executive reports.',
           },
-          { icon: 'mentor', text: 'I supervise and mentor an IT intern, assigning technical tasks and reviewing deliverables.' },
+          {
+            icon: 'mentor',
+            text: 'I supervise and mentor an IT intern, assigning technical tasks and reviewing deliverables.',
+          },
           {
             icon: 'network',
             text: 'I manage network infrastructure, information security and end-user support, including a preventive maintenance program for employee workstations.',
@@ -163,11 +166,15 @@ export const en: SiteContent = {
         current: false,
         scene: 'plastic-omnium-plant',
         sceneAlt: 'Automotive assembly line with robotic arms',
-        intro: 'I supported the technology operations of a manufacturing plant, from industrial software to equipment maintenance.',
+        intro:
+          'I supported the technology operations of a manufacturing plant, from industrial software to equipment maintenance.',
         items: [
           { icon: 'factory', text: 'Developed industrial software applications to streamline plant operations.' },
           { icon: 'team', text: 'Led a team of technicians in rolling out new technology processes.' },
-          { icon: 'wrench', text: 'Performed preventive and corrective maintenance on computer equipment and industrial systems.' },
+          {
+            icon: 'wrench',
+            text: 'Performed preventive and corrective maintenance on computer equipment and industrial systems.',
+          },
         ],
       },
     ],

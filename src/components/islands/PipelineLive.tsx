@@ -35,12 +35,48 @@ type Stage = { pos: Pos; icon: ReactNode; title: string; sub: string; place: str
 function buildStages(t: PipelineCopy): Stage[] {
   const s = t.stages;
   return [
-    { pos: 0, icon: <Database size={22} weight="duotone" />, title: s.erp[0], sub: s.erp[1], place: 'lg:col-start-1 lg:row-start-1' },
-    { pos: 1, icon: <Sparkle size={22} weight="duotone" />, title: s.agent[0], sub: s.agent[1], place: 'lg:col-start-2 lg:row-start-1' },
-    { pos: 2, icon: <Gauge size={22} weight="duotone" />, title: s.gate[0], sub: fill(s.gate[1], { t: fmt(THRESHOLD_DEFAULT) }), place: 'lg:col-start-3 lg:row-start-1' },
-    { pos: 'review', icon: <UserFocus size={22} weight="duotone" />, title: s.review[0], sub: s.review[1], place: 'lg:col-start-3 lg:row-start-2' },
-    { pos: 3, icon: <Stack size={22} weight="duotone" />, title: s.dw[0], sub: s.dw[1], place: 'lg:col-start-4 lg:row-start-1' },
-    { pos: 4, icon: <ChartLineUp size={22} weight="duotone" />, title: s.bi[0], sub: s.bi[1], place: 'lg:col-start-5 lg:row-start-1' },
+    {
+      pos: 0,
+      icon: <Database size={22} weight="duotone" />,
+      title: s.erp[0],
+      sub: s.erp[1],
+      place: 'lg:col-start-1 lg:row-start-1',
+    },
+    {
+      pos: 1,
+      icon: <Sparkle size={22} weight="duotone" />,
+      title: s.agent[0],
+      sub: s.agent[1],
+      place: 'lg:col-start-2 lg:row-start-1',
+    },
+    {
+      pos: 2,
+      icon: <Gauge size={22} weight="duotone" />,
+      title: s.gate[0],
+      sub: fill(s.gate[1], { t: fmt(THRESHOLD_DEFAULT) }),
+      place: 'lg:col-start-3 lg:row-start-1',
+    },
+    {
+      pos: 'review',
+      icon: <UserFocus size={22} weight="duotone" />,
+      title: s.review[0],
+      sub: s.review[1],
+      place: 'lg:col-start-3 lg:row-start-2',
+    },
+    {
+      pos: 3,
+      icon: <Stack size={22} weight="duotone" />,
+      title: s.dw[0],
+      sub: s.dw[1],
+      place: 'lg:col-start-4 lg:row-start-1',
+    },
+    {
+      pos: 4,
+      icon: <ChartLineUp size={22} weight="duotone" />,
+      title: s.bi[0],
+      sub: s.bi[1],
+      place: 'lg:col-start-5 lg:row-start-1',
+    },
   ];
 }
 
@@ -159,7 +195,12 @@ export default function PipelineLive({ copy, records: RECORDS }: { copy: Pipelin
                 </div>
 
                 {/* Ranura reservada: evita saltos de layout cuando llega o se va el paquete */}
-                <div className={['sm:w-60 sm:shrink-0 lg:w-auto', isReview ? 'min-h-[52px]' : 'min-h-[52px] lg:min-h-[60px]'].join(' ')}>
+                <div
+                  className={[
+                    'sm:w-60 sm:shrink-0 lg:w-auto',
+                    isReview ? 'min-h-[52px]' : 'min-h-[52px] lg:min-h-[60px]',
+                  ].join(' ')}
+                >
                   {active && (
                     <motion.div
                       layoutId="packet"

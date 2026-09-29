@@ -6,7 +6,7 @@ Complemento de `agent.md`. Aquí vive el "qué" (contenido, estructura, decision
 
 Web personal de Jesús Almanza que presente su perfil profesional como una propuesta de valor, no como un CV pegado. Público principal: reclutadores técnicos, líderes de datos/TI y dirección de empresas financieras en México. La pregunta que responde en 10 segundos: "¿qué construye y por qué confiar en él?".
 
-Fuente de verdad del contenido: `CV Jesús Almanza.pdf` (página 1 en inglés, página 2 en español). La web es bilingüe: inglés en `/` (idioma por defecto desde el 2026-09-28) y español en `/es/`. Todo el texto vive en `src/i18n/es.ts` y `src/i18n/en.ts`, ambos tipados con `SiteContent` (`src/i18n/types.ts`); si a un idioma le falta un campo, el build falla.
+Fuente de verdad del contenido: `public/cv/Jesus-Almanza-CV.pdf` (página 1 en inglés, página 2 en español). Paleta de referencia: `docs/brand/palette.jpeg`. La web es bilingüe: inglés en `/` (idioma por defecto desde el 2026-09-28) y español en `/es/`. Todo el texto vive en `src/i18n/es.ts` y `src/i18n/en.ts`, ambos tipados con `SiteContent` (`src/i18n/types.ts`); si a un idioma le falta un campo, el build falla.
 
 ## 2. Posicionamiento
 
@@ -82,7 +82,7 @@ public/
 - 2026-09-28: Tailwind v4 con tokens por variables CSS y `data-theme` para permitir toggle manual + preferencia del sistema.
 - 2026-09-28: Logos de tecnologías con `simple-icons` en build (sin CDN externo) y monocromos para respetar la paleta.
 - 2026-09-28: Capa visual "aurora" (`src/components/Aurora.astro`): degradados radiales de la paleta que derivan en 22-38 s, solo transform/opacity, sin `filter: blur` (Chrome recorta el desenfoque y deja cortes). Presente en hero (se desvanece con el scroll), tile de MatchCount, banda del Stack, contacto y marco del retrato. Máximo 4 superficies con aurora por página.
-- 2026-09-28: Retrato del dueño sin fondo (`src/assets/portrait.png`, recortado de `JesusAlmanzaIMG.png`). Versión final en `Portrait.astro`: SIN marco; foto en blanco y negro con contraste alto (filtro CSS, el PNG original conserva el color); luz de aurora sin bordes detrás de cabeza y hombros, disolución inferior con máscara, rim light sutil en oscuro y parallax por capas con el puntero. Rechazado por el dueño (no reintroducir): recuadro/marco, apellido gigante detrás y anillo concéntrico.
+- 2026-09-28: Retrato del dueño sin fondo (`src/assets/portrait.png`, recortado de la foto original `JesusAlmanzaIMG.png`, que se queda solo en local y no se sube al repositorio). Versión final en `Portrait.astro`: SIN marco; foto en blanco y negro con contraste alto (filtro CSS, el PNG original conserva el color); luz de aurora sin bordes detrás de cabeza y hombros, disolución inferior con máscara, rim light sutil en oscuro y parallax por capas con el puntero. Rechazado por el dueño (no reintroducir): recuadro/marco, apellido gigante detrás y anillo concéntrico.
 - 2026-09-28: Fotografía editorial generada con IA (Canva) en Experiencia y Formación, vía `SceneImage.astro` con velo de marca.
 - 2026-09-28: Auditoría + sistema de texturas "cyber-aurora" (agent.md §6.2): grano global, piso de retícula en el hero, corchetes HUD, scanlines en MatchCount, borde iluminado en tarjetas, riel de línea de tiempo en Experiencia, reglas de datos entre secciones y eyebrow que se decodifica.
 - 2026-09-28: Versión en inglés con i18n nativo de Astro (`/en/`, sin prefijo para español). hreflang es-MX/en/x-default, og:locale por idioma, sitemap con alternates, anclas de sección traducidas (#proyectos / #projects), selector ES/EN en la nav. Las islas React reciben sus textos por props (serializables, sin funciones).
@@ -101,13 +101,21 @@ public/
 - Para revisar si vuelve a pasar: `find node_modules -type f -flags +dataless | wc -l` debe dar 0. Si no, `rm -rf node_modules && npm install`.
 - Alternativa definitiva: mover el proyecto fuera del Escritorio/Documentos (por ejemplo `~/Developer/`).
 
-## 8. Comandos
+## 8. Comandos y repositorio
 
 ```
-npm run dev       # servidor local en http://localhost:4321 (Astro 7 lo corre como daemon: `npx astro dev stop` para detenerlo)
-npm run build     # astro check + build estático en dist/
-npm run preview   # sirve dist/
+npm run dev            # servidor local en http://localhost:4321 (inglés) y /es/ (español)
+npm run build          # astro check + build estático en dist/
+npm run preview        # sirve dist/
+npm run format         # Prettier (plugins de Astro y Tailwind) sobre todo el proyecto
+npm run format:check   # lo mismo sin escribir (lo usa CI)
 ```
+
+- Repositorio: https://github.com/JAlcon00/JesusAlmanzaCVWeb (rama `main`).
+- CI (`.github/workflows/ci.yml`): `npm ci` + `format:check` + `build` en cada push y PR. Si falla el formato, correr `npm run format` antes de subir.
+- Dependabot (`.github/dependabot.yml`): npm semanal agrupado, Actions mensual.
+- Licencia: todos los derechos reservados (`LICENSE`, `"license": "UNLICENSED"` en package.json).
+- No se suben (ver `.gitignore`): `.claude/`, la foto original sin recortar y la copia del CV en la raíz.
 
 ## 9. Guía de estilo del copy (español de México)
 

@@ -1,9 +1,6 @@
 import { useId, useMemo, useState } from 'react';
 import { LayoutGroup, motion, useReducedMotion } from 'motion/react';
-import {
-  CheckCircleIcon as CheckCircle,
-  UserFocusIcon as UserFocus,
-} from '@phosphor-icons/react';
+import { CheckCircleIcon as CheckCircle, UserFocusIcon as UserFocus } from '@phosphor-icons/react';
 import { THRESHOLD_DEFAULT } from '../../i18n/shared';
 import { fill } from '../../i18n/fill';
 import type { RouterCopy, SampleAccount } from '../../i18n/types';

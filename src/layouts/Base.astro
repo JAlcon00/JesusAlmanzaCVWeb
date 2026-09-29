@@ -39,7 +39,9 @@ const jsonLd = {
     <link rel="preload" as="font" type="font/woff2" href={geistUrl} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={geistMonoUrl} crossorigin />
     <link rel="canonical" href={canonical} />
-    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+    ))}
     <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -54,7 +56,6 @@ const jsonLd = {
     <meta name="twitter:card" content="summary" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-
     <!-- Tema antes del primer pintado: evita el flash de color incorrecto -->
     <script is:inline>
       (() => {

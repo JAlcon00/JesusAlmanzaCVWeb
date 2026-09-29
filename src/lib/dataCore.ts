@@ -59,8 +59,7 @@ function cubeShape(n: number): Shape {
   const r = rng(11);
   const side = Math.ceil(Math.cbrt(n));
   const cells: number[][] = [];
-  for (let x = 0; x < side; x++)
-    for (let y = 0; y < side; y++) for (let z = 0; z < side; z++) cells.push([x, y, z]);
+  for (let x = 0; x < side; x++) for (let y = 0; y < side; y++) for (let z = 0; z < side; z++) cells.push([x, y, z]);
   // Mezcla determinista: los huecos que sobran quedan repartidos, como registros en un almacén
   for (let i = cells.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));

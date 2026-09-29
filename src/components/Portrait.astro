@@ -26,27 +26,27 @@ const initials = person.name
 <figure class="portrait relative w-full" style="aspect-ratio: 4 / 5" data-portrait>
   <span aria-hidden="true" class="p-layer p-glow"></span>
 
-  {
-    portrait ? (
-      <div class="p-layer p-person absolute inset-0">
-        <Image
-          src={portrait}
-          alt={`${person.name}, ${c.person.role}`}
-          widths={[420, 640, 900]}
-          sizes="(min-width: 1024px) 420px, (min-width: 768px) 40vw, 360px"
-          class="p-img size-full object-cover object-top"
-          loading="lazy"
-        />
-      </div>
-    ) : (
-      <div class="absolute inset-0 grid place-items-center">
-        <span aria-hidden="true" class="font-mono text-[clamp(4rem,12vw,8rem)] font-semibold tracking-[-0.06em] text-ink">
-          {initials}
-        </span>
-        <span class="sr-only">{c.ui.monogram} {person.name}</span>
-      </div>
-    )
-  }
+  {portrait ? (
+    <div class="p-layer p-person absolute inset-0">
+      <Image
+        src={portrait}
+        alt={`${person.name}, ${c.person.role}`}
+        widths={[420, 640, 900]}
+        sizes="(min-width: 1024px) 420px, (min-width: 768px) 40vw, 360px"
+        class="p-img size-full object-cover object-top"
+        loading="lazy"
+      />
+    </div>
+  ) : (
+    <div class="absolute inset-0 grid place-items-center">
+      <span aria-hidden="true" class="font-mono text-[clamp(4rem,12vw,8rem)] font-semibold tracking-[-0.06em] text-ink">
+        {initials}
+      </span>
+      <span class="sr-only">
+        {c.ui.monogram} {person.name}
+      </span>
+    </div>
+  )}
 </figure>
 
 <script>

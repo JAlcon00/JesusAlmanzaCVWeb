@@ -17,23 +17,28 @@ interface Props {
   flush?: boolean;
 }
 
-const { name, alt, aspect = '4 / 3', sizes = '(min-width: 1024px) 400px, 90vw', class: className = '', flush = false } = Astro.props;
+const {
+  name,
+  alt,
+  aspect = '4 / 3',
+  sizes = '(min-width: 1024px) 400px, 90vw',
+  class: className = '',
+  flush = false,
+} = Astro.props;
 
 const src = getScene(name);
 ---
 
-{
-  src && (
-    <figure
-      class:list={['scene relative isolate overflow-clip bg-deep', flush ? 'rounded-none' : 'rounded-2xl', className]}
-      style={`aspect-ratio: ${aspect}; --scene-radius: ${flush ? '0px' : '1rem'}`}
-    >
-      <Image src={src} alt={alt} widths={[480, 800, 1200]} sizes={sizes} class="size-full object-cover" loading="lazy" />
-      {/* Velo de marca: unifica el tono de la foto con la paleta sin tapar el contenido */}
-      <span aria-hidden="true" class="scene-veil pointer-events-none absolute inset-0" />
-    </figure>
-  )
-}
+{src && (
+  <figure
+    class:list={['scene relative isolate overflow-clip bg-deep', flush ? 'rounded-none' : 'rounded-2xl', className]}
+    style={`aspect-ratio: ${aspect}; --scene-radius: ${flush ? '0px' : '1rem'}`}
+  >
+    <Image src={src} alt={alt} widths={[480, 800, 1200]} sizes={sizes} class="size-full object-cover" loading="lazy" />
+    {/* Velo de marca: unifica el tono de la foto con la paleta sin tapar el contenido */}
+    <span aria-hidden="true" class="scene-veil pointer-events-none absolute inset-0" />
+  </figure>
+)}
 
 <style>
   .scene-veil {

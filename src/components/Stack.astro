@@ -35,44 +35,44 @@ const withLogo = stack.flatMap((g) => g.items).filter((t) => t.logo);
     style="mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent)"
   >
     <div class="marquee-track">
-      {
-        [false, true].map((dup) => (
-          <ul class="flex shrink-0 items-center gap-14 px-5" aria-hidden={dup ? 'true' : undefined} aria-label={dup ? undefined : c.ui.technologies}>
-            {withLogo.map((t) => (
-              <li class="flex items-center gap-3 text-muted">
-                <TechLogo tech={t} size={28} />
-                <span class="text-lg font-medium whitespace-nowrap">{t.name}</span>
-              </li>
-            ))}
-          </ul>
-        ))
-      }
+      {[false, true].map((dup) => (
+        <ul
+          class="flex shrink-0 items-center gap-14 px-5"
+          aria-hidden={dup ? 'true' : undefined}
+          aria-label={dup ? undefined : c.ui.technologies}
+        >
+          {withLogo.map((t) => (
+            <li class="flex items-center gap-3 text-muted">
+              <TechLogo tech={t} size={28} />
+              <span class="text-lg font-medium whitespace-nowrap">{t.name}</span>
+            </li>
+          ))}
+        </ul>
+      ))}
     </div>
   </div>
 
   <div class="container-page">
     <div class="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-2 md:mt-16 lg:grid-cols-5 lg:gap-8">
-      {
-        stack.map((group) => {
-          const GroupIcon = groupIcons[group.icon as keyof typeof groupIcons] ?? Code;
-          return (
-            <div class="reveal">
-              <h3 class="flex items-center gap-2.5 font-medium">
-                <GroupIcon size={22} weight="duotone" aria-hidden="true" className="text-accent-ink" />
-                {group.label}
-              </h3>
-              <ul class="mt-5 flex flex-col gap-3">
-                {group.items.map((t) => (
-                  <li class="flex items-center gap-2.5 text-sm text-muted">
-                    <TechLogo tech={t} size={16} class="shrink-0 text-ink/70" />
-                    {t.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })
-      }
+      {stack.map((group) => {
+        const GroupIcon = groupIcons[group.icon as keyof typeof groupIcons] ?? Code;
+        return (
+          <div class="reveal">
+            <h3 class="flex items-center gap-2.5 font-medium">
+              <GroupIcon size={22} weight="duotone" aria-hidden="true" className="text-accent-ink" />
+              {group.label}
+            </h3>
+            <ul class="mt-5 flex flex-col gap-3">
+              {group.items.map((t) => (
+                <li class="flex items-center gap-2.5 text-sm text-muted">
+                  <TechLogo tech={t} size={16} class="shrink-0 text-ink/70" />
+                  {t.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
     </div>
   </div>
 </section>

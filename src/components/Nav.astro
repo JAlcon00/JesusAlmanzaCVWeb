@@ -27,29 +27,36 @@ const nav = [
       class="nav-glass relative flex h-14 items-center justify-between gap-3 overflow-hidden rounded-full border border-line pr-1.5 pl-4 md:h-16 md:pr-2 md:pl-6"
     >
       <!-- Progreso de lectura: línea índigo que crece con el scroll de la página -->
-      <span aria-hidden="true" class="nav-progress pointer-events-none absolute inset-x-6 bottom-0 h-px bg-accent"></span>
+      <span
+        aria-hidden="true"
+        class="nav-progress pointer-events-none absolute inset-x-6 bottom-0 h-px bg-accent"
+      ></span>
       <!-- Wordmark: el nombre escrito como identificador de código (Jesús.Almanza) con cursor de terminal -->
       <a href={`#${c.ids.home}`} class="wordmark flex min-h-11 items-center" data-wordmark>
         <span class="sr-only">{person.name}</span>
-        <span aria-hidden="true" class="flex items-baseline font-mono text-[15px] font-bold tracking-[-0.04em] whitespace-nowrap sm:text-[17px]">
-          <span data-scramble={first}>{first}</span><span class="wordmark-dot text-accent-ink">.</span><span data-scramble={last}>{last}</span><span class="wordmark-caret"></span>
+        <span
+          aria-hidden="true"
+          class="flex items-baseline font-mono text-[15px] font-bold tracking-[-0.04em] whitespace-nowrap sm:text-[17px]"
+        >
+          <span data-scramble={first}>{first}</span>
+          <span class="wordmark-dot text-accent-ink">.</span>
+          <span data-scramble={last}>{last}</span>
+          <span class="wordmark-caret"></span>
         </span>
       </a>
 
       <ul class="hidden items-center gap-1 lg:flex">
-        {
-          nav.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                data-nav-link
-                class="inline-flex min-h-11 items-center rounded-full px-4 text-sm text-muted transition-colors duration-300 hover:bg-surface hover:text-ink aria-[current=true]:bg-surface aria-[current=true]:text-ink"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
+        {nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              data-nav-link
+              class="inline-flex min-h-11 items-center rounded-full px-4 text-sm text-muted transition-colors duration-300 hover:bg-surface hover:text-ink aria-[current=true]:bg-surface aria-[current=true]:text-ink"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
 
       <div class="flex items-center gap-1.5">
@@ -130,7 +137,9 @@ const nav = [
   if (targets.length) {
     const io = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (!visible) return;
         links.forEach((a) => {
           const on = a.getAttribute('href') === `#${visible.target.id}`;

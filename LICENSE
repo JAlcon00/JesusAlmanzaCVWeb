@@ -1,0 +1,13 @@
+Copyright (c) 2026 Jesús Almanza. All rights reserved.
+
+This repository contains the source code and content of a personal portfolio
+website, including personal information, a portrait photograph, a resume (CV)
+and written copy.
+
+No license is granted to copy, modify, distribute, publish or use any part of
+this repository, in whole or in part, without prior written permission from
+the copyright holder. Viewing the code on GitHub for reference is permitted.
+
+Third-party components keep their own licenses: Astro, React, Motion, Three.js,
+Tailwind CSS, Phosphor Icons (MIT), Simple Icons (CC0 1.0) and the Geist fonts
+(SIL Open Font License 1.1).

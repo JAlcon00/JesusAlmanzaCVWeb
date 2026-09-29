@@ -1,4 +1,4 @@
-/** Datos que no cambian entre idiomas. Fuente: CV Jesús Almanza.pdf (ver context.md §3). */
+/** Datos que no cambian entre idiomas. Fuente: public/cv/Jesus-Almanza-CV.pdf (ver context.md §3). */
 
 export const person = {
   name: 'Jesús Almanza',

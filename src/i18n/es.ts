@@ -114,7 +114,12 @@ export const es: SiteContent = {
     { value: 4762, label: 'registros contables consolidados de dos empresas del grupo' },
     { value: 791, label: 'pruebas de backend aprobadas con pytest' },
     { value: 60, label: 'casos en la matriz de QA, validados contra el data warehouse en producción' },
-    { value: 1, prefix: '<', suffix: ' s', label: 'de latencia mediana por endpoint a lo largo de cinco sprints de Scrum' },
+    {
+      value: 1,
+      prefix: '<',
+      suffix: ' s',
+      label: 'de latencia mediana por endpoint a lo largo de cinco sprints de Scrum',
+    },
   ],
   projects: {
     heading: 'Del ERP al tablero de la dirección.',
@@ -193,7 +198,10 @@ export const es: SiteContent = {
             icon: 'data',
             text: 'Construí MatchCount y desarrollo el backend de DashBI: la cadena que lleva la contabilidad del ERP hasta los reportes de la dirección.',
           },
-          { icon: 'mentor', text: 'Superviso y oriento a una practicante de TI: le asigno tareas técnicas y reviso sus entregables.' },
+          {
+            icon: 'mentor',
+            text: 'Superviso y oriento a una practicante de TI: le asigno tareas técnicas y reviso sus entregables.',
+          },
           {
             icon: 'network',
             text: 'Administro la infraestructura de red, la seguridad de la información y el soporte a usuarios, incluido un programa de mantenimiento preventivo para los equipos de cómputo del personal.',
@@ -213,8 +221,14 @@ export const es: SiteContent = {
         intro:
           'Participé en la operación tecnológica de una planta de manufactura, del software industrial al mantenimiento de equipos.',
         items: [
-          { icon: 'factory', text: 'Desarrollé aplicaciones de software industrial para optimizar la operación de la planta.' },
-          { icon: 'team', text: 'Lideré a un equipo de técnicos en la implementación de nuevos procesos tecnológicos.' },
+          {
+            icon: 'factory',
+            text: 'Desarrollé aplicaciones de software industrial para optimizar la operación de la planta.',
+          },
+          {
+            icon: 'team',
+            text: 'Lideré a un equipo de técnicos en la implementación de nuevos procesos tecnológicos.',
+          },
           {
             icon: 'wrench',
             text: 'Realicé el mantenimiento preventivo y correctivo de equipos de cómputo y sistemas industriales.',
@@ -233,7 +247,13 @@ export const es: SiteContent = {
     sceneAlt: 'Espacio de estudio nocturno con laptop y cuadernos con diagramas de bases de datos',
     status: 'Egreso previsto: diciembre de 2026',
     courseworkLabel: 'Materias destacadas',
-    coursework: ['Estructuras de Datos', 'Algoritmos', 'Bases de Datos', 'Cómputo en la Nube', 'Desarrollo Web y Móvil'],
+    coursework: [
+      'Estructuras de Datos',
+      'Algoritmos',
+      'Bases de Datos',
+      'Cómputo en la Nube',
+      'Desarrollo Web y Móvil',
+    ],
     certificationLabel: 'Certificación',
     certification: { name: 'Desarrollo Web con React', issuer: 'UNAM' },
     languagesLabel: 'Idiomas',

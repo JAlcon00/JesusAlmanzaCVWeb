@@ -17,17 +17,17 @@ interface Props {
 }
 
 const { tech, size = 18, class: className } = Astro.props;
-const icon = tech.logo ? (simpleIcons as unknown as Record<string, { path: string } | undefined>)[tech.logo] : undefined;
+const icon = tech.logo
+  ? (simpleIcons as unknown as Record<string, { path: string } | undefined>)[tech.logo]
+  : undefined;
 const fallbacks = { code: Code, database: Database, cloud: Cloud, brain: Brain, chart: ChartBar } as const;
 const Fallback = fallbacks[tech.fallback ?? 'code'];
 ---
 
-{
-  icon ? (
-    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" class={className} fill="currentColor">
-      <path d={icon.path} />
-    </svg>
-  ) : (
-    <Fallback size={size} aria-hidden="true" className={className} />
-  )
-}
+{icon ? (
+  <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" class={className} fill="currentColor">
+    <path d={icon.path} />
+  </svg>
+) : (
+  <Fallback size={size} aria-hidden="true" className={className} />
+)}

@@ -1,8 +1,5 @@
 ---
-import {
-  CalendarBlankIcon as CalendarBlank,
-  MapPinIcon as MapPin,
-} from '@phosphor-icons/react/dist/ssr';
+import { CalendarBlankIcon as CalendarBlank, MapPinIcon as MapPin } from '@phosphor-icons/react/dist/ssr';
 import HighlightIcon from './HighlightIcon.astro';
 import SceneImage from './SceneImage.astro';
 import Words from './Words.astro';
@@ -29,10 +26,9 @@ const { experience } = c;
       </div>
 
       <ol class="flex flex-col gap-16 md:gap-24">
-        {
-          experience.roles.map((role) => {
-            const current = role.current;
-            return (
+        {experience.roles.map((role) => {
+          const current = role.current;
+          return (
             <li class="relative grid grid-cols-1 gap-8 border-t border-line-strong pt-8 md:grid-cols-12 md:gap-12 md:pt-10">
               {/* Nodo: menta pulsante = puesto actual (estado real), índigo hueco = puesto anterior */}
               <span
@@ -80,9 +76,8 @@ const { experience } = c;
                 </ul>
               </div>
             </li>
-            );
-          })
-        }
+          );
+        })}
       </ol>
     </div>
   </div>

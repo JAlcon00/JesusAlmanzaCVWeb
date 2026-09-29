@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Dependencias de npm: un solo PR semanal agrupado para no llenar el repo de PRs
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dependencies:
+        patterns: ['*']
+
+  # Versiones de las GitHub Actions del flujo de CI
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

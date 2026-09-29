@@ -12,14 +12,23 @@ const c = getContent(Astro.currentLocale);
 const { hero } = c;
 ---
 
-<section id={c.ids.home} aria-labelledby="hero-title" class="relative isolate overflow-clip pt-28 pb-20 md:pt-32 md:pb-28">
+<section
+  id={c.ids.home}
+  aria-labelledby="hero-title"
+  class="relative isolate overflow-clip pt-28 pb-20 md:pt-32 md:pb-28"
+>
   <Aurora variant="hero" class="h-[820px] bottom-auto" />
   <CyberGrid />
 
   <div class="container-page">
-    <p class="hero-in hero-drift font-mono text-xs tracking-[0.08em] text-muted uppercase" style="--d: 0ms; --drift: -40%; --drift-opacity: 0">
+    <p
+      class="hero-in hero-drift font-mono text-xs tracking-[0.08em] text-muted uppercase"
+      style="--d: 0ms; --drift: -40%; --drift-opacity: 0"
+    >
       <span class="sr-only">{hero.eyebrow}</span>
-      <span aria-hidden="true" data-decode={hero.eyebrow}>{hero.eyebrow}</span>
+      <span aria-hidden="true" data-decode={hero.eyebrow}>
+        {hero.eyebrow}
+      </span>
     </p>
 
     <h1
@@ -30,7 +39,10 @@ const { hero } = c;
       {hero.lead} <span class="text-accent-ink">{hero.accent}</span>
     </h1>
 
-    <div class="hero-drift mt-8 grid grid-cols-1 items-end gap-8 md:mt-10 md:grid-cols-12" style="--drift: -12%; --drift-opacity: 0">
+    <div
+      class="hero-drift mt-8 grid grid-cols-1 items-end gap-8 md:mt-10 md:grid-cols-12"
+      style="--drift: -12%; --drift-opacity: 0"
+    >
       <p class="hero-in max-w-[46ch] text-lg leading-relaxed text-muted md:col-span-7 md:text-xl" style="--d: 100ms">
         {hero.sub}
       </p>
@@ -54,7 +66,10 @@ const { hero } = c;
       </div>
     </div>
 
-    <div class="hero-in hero-drift mt-12 md:mt-16" style="--d: 200ms; --drift: -3%; --drift-scale: 0.96; --drift-opacity: 0.35">
+    <div
+      class="hero-in hero-drift mt-12 md:mt-16"
+      style="--d: 200ms; --drift: -3%; --drift-scale: 0.96; --drift-opacity: 0.35"
+    >
       <PipelineLive client:load copy={c.islands.pipeline} records={c.samples.slice(0, 6)} />
     </div>
   </div>
@@ -74,9 +89,7 @@ const { hero } = c;
       const progress = Math.min(1, (now - start) / duration);
       const revealed = Math.floor(progress * target.length);
       el.textContent = [...target]
-        .map((ch, i) =>
-          i < revealed || ch === ' ' ? ch : glyphs[Math.floor(Math.random() * glyphs.length)],
-        )
+        .map((ch, i) => (i < revealed || ch === ' ' ? ch : glyphs[Math.floor(Math.random() * glyphs.length)]))
         .join('');
       if (progress < 1) requestAnimationFrame(tick);
       else el.textContent = target;

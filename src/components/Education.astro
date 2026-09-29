@@ -31,7 +31,9 @@ const { education } = c;
 
       <h3 class="mt-10 text-sm font-medium">{education.courseworkLabel}</h3>
       <ul class="mt-4 flex flex-wrap gap-2">
-        {education.coursework.map((c) => <li class="rounded-full bg-surface px-4 py-2 text-sm">{c}</li>)}
+        {education.coursework.map((c) => (
+          <li class="rounded-full bg-surface px-4 py-2 text-sm">{c}</li>
+        ))}
       </ul>
     </div>
 
@@ -58,14 +60,12 @@ const { education } = c;
           {education.languagesLabel}
         </h3>
         <dl class="mt-4 flex flex-col gap-4">
-          {
-            education.languages.map((l) => (
-              <div class="flex items-baseline justify-between gap-4">
-                <dt class="text-xl font-semibold tracking-[-0.02em]">{l.name}</dt>
-                <dd class="text-right text-sm text-muted">{l.level}</dd>
-              </div>
-            ))
-          }
+          {education.languages.map((l) => (
+            <div class="flex items-baseline justify-between gap-4">
+              <dt class="text-xl font-semibold tracking-[-0.02em]">{l.name}</dt>
+              <dd class="text-right text-sm text-muted">{l.level}</dd>
+            </div>
+          ))}
         </dl>
       </div>
     </div>

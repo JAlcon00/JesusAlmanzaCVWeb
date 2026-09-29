@@ -54,28 +54,26 @@ const links = [
       </a>
 
       <ul class="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {
-          links.map(({ href, label, icon: Icon, external }) => (
-            <li>
-              <a
-                href={href}
-                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                class="spotlight group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-line bg-bg px-4 text-sm transition-colors duration-300 hover:border-line-strong"
-              >
-                <span class="flex min-w-0 items-center gap-3">
-                  <Icon size={22} weight="duotone" aria-hidden="true" className="shrink-0 text-accent-ink" />
-                  <span class="truncate">{label}</span>
-                </span>
-                <ArrowUpRight
-                  size={16}
-                  aria-hidden="true"
-                  className="shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-                {external && <span class="sr-only">{c.ui.newTab}</span>}
-              </a>
-            </li>
-          ))
-        }
+        {links.map(({ href, label, icon: Icon, external }) => (
+          <li>
+            <a
+              href={href}
+              {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              class="spotlight group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-line bg-bg px-4 text-sm transition-colors duration-300 hover:border-line-strong"
+            >
+              <span class="flex min-w-0 items-center gap-3">
+                <Icon size={22} weight="duotone" aria-hidden="true" className="shrink-0 text-accent-ink" />
+                <span class="truncate">{label}</span>
+              </span>
+              <ArrowUpRight
+                size={16}
+                aria-hidden="true"
+                className="shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+              {external && <span class="sr-only">{c.ui.newTab}</span>}
+            </a>
+          </li>
+        ))}
         <li>
           <a
             href={person.cvUrl}

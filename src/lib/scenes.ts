@@ -4,6 +4,12 @@ import type { ImageMetadata } from 'astro';
 const scenes = import.meta.glob<{ default: ImageMetadata }>('../assets/scenes/*.{jpg,jpeg,png,webp}', { eager: true });
 
 export function getScene(name: string): ImageMetadata | undefined {
-  const match = Object.entries(scenes).find(([path]) => path.split('/').pop()?.replace(/\.\w+$/, '') === name);
+  const match = Object.entries(scenes).find(
+    ([path]) =>
+      path
+        .split('/')
+        .pop()
+        ?.replace(/\.\w+$/, '') === name,
+  );
   return match?.[1].default;
 }
