@@ -29,25 +29,25 @@ const dots = Math.round(mc.stat.value / 10 / COLS) * COLS;
       <!-- MatchCount: celda principal, ancla oscura en ambos temas -->
       <article
         aria-labelledby="mc-title"
-        class="scanlines reveal relative isolate flex flex-col overflow-clip rounded-2xl bg-deep p-6 text-deep-ink md:p-10 lg:col-span-7 lg:row-span-2"
+        class="mc-tile scanlines reveal relative isolate flex flex-col overflow-clip rounded-2xl p-6 text-(--mc-ink) md:p-10 lg:col-span-7 lg:row-span-2"
       >
         <Aurora variant="panel" class="mc-aurora" />
-        <p class="font-mono text-xs text-deep-muted">{mc.kind}</p>
+        <p class="font-mono text-xs text-(--mc-muted)">{mc.kind}</p>
         <h3 id="mc-title" class="mt-3 text-4xl font-semibold tracking-[-0.035em] md:text-5xl">
           {mc.name}
         </h3>
-        <p class="mt-4 inline-flex w-fit items-center rounded-full border border-white/15 px-3 py-1 text-xs text-deep-ink/90">
+        <p class="mt-4 inline-flex w-fit items-center rounded-full border border-(--mc-line) px-3 py-1 text-xs text-(--mc-ink)/90">
           {mc.role}
         </p>
-        <p class="mt-6 max-w-[48ch] text-lg leading-relaxed text-deep-ink/85">{mc.pitch}</p>
+        <p class="mt-6 max-w-[48ch] text-lg leading-relaxed text-(--mc-ink)/85">{mc.pitch}</p>
 
         <ul class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
           {mc.highlights.map((h) => (
             <li class="flex flex-col gap-3">
-              <span class="grid size-10 place-items-center rounded-full bg-white/[0.07] text-[#a5b4fc]">
+              <span class="grid size-10 place-items-center rounded-full bg-(--mc-icon) text-(--mc-accent)">
                 <HighlightIcon name={h.icon} />
               </span>
-              <p class="text-sm leading-relaxed text-deep-muted">{h.text}</p>
+              <p class="text-sm leading-relaxed text-(--mc-muted)">{h.text}</p>
             </li>
           ))}
         </ul>
@@ -55,24 +55,24 @@ const dots = Math.round(mc.stat.value / 10 / COLS) * COLS;
         <!-- Solo escritorio: rellena el alto que deja la columna derecha con la cifra real del proyecto -->
         <figure class="mt-12 hidden flex-1 flex-col justify-center gap-6 lg:flex">
           <div class="flex items-end gap-5">
-            <p class="font-mono text-6xl leading-none font-medium tracking-[-0.04em] text-[#34d399] tabular-nums">
+            <p class="font-mono text-6xl leading-none font-medium tracking-[-0.04em] text-(--mc-stat) tabular-nums">
               <span data-count={mc.stat.value} data-locale={locale}>
                 {mc.stat.value.toLocaleString(locale)}
               </span>
             </p>
-            <p class="max-w-[30ch] pb-1 text-sm leading-snug text-deep-muted">{mc.stat.label}</p>
+            <p class="max-w-[30ch] pb-1 text-sm leading-snug text-(--mc-muted)">{mc.stat.label}</p>
           </div>
           <div aria-hidden="true" class="mc-dots grid gap-[7px]">
             {Array.from({ length: dots }, () => (
               <span class="mc-dot" />
             ))}
           </div>
-          <figcaption class="font-mono text-[11px] text-deep-muted">{mc.stat.legend}</figcaption>
+          <figcaption class="font-mono text-[11px] text-(--mc-muted)">{mc.stat.legend}</figcaption>
         </figure>
 
         <ul class="mt-auto flex flex-wrap gap-2 pt-10" aria-label={c.ui.techOf(mc.name)}>
           {mc.tech.map((t) => (
-            <li class="rounded-full border border-white/12 px-3 py-1.5 font-mono text-xs text-deep-ink/85">{t}</li>
+            <li class="rounded-full border border-(--mc-line) px-3 py-1.5 font-mono text-xs text-(--mc-ink)/85">{t}</li>
           ))}
         </ul>
       </article>
@@ -131,7 +131,39 @@ const dots = Math.round(mc.stat.value / 10 / COLS) * COLS;
 </section>
 
 <style>
-  /* El tile es navy en ambos temas: la aurora usa la intensidad del modo oscuro */
+  /*
+   * Tile de MatchCount: sigue el tema de la página.
+   * Claro: superficie índigo muy suave, texto navy. Oscuro: navy profundo con aurora intensa y scanlines.
+   */
+  .mc-tile {
+    --mc-bg: linear-gradient(160deg, #eef2ff 0%, #f1f5f9 70%);
+    --mc-edge: rgb(79 70 229 / 0.14);
+    --mc-ink: #0f172a;
+    --mc-muted: #475569;
+    --mc-accent: #4f46e5;
+    --mc-icon: rgb(79 70 229 / 0.1);
+    --mc-line: rgb(15 23 42 / 0.14);
+    --mc-stat: #059669;
+    --mc-dot: rgb(5 150 105 / 0.7);
+    --mc-dot-glow: transparent;
+    --scan: rgb(15 23 42 / 0.025);
+    background: var(--mc-bg);
+    box-shadow: inset 0 0 0 1px var(--mc-edge);
+  }
+  :global([data-theme='dark']) .mc-tile {
+    --mc-bg: var(--deep);
+    --mc-edge: transparent;
+    --mc-ink: #f8fafc;
+    --mc-muted: #94a3b8;
+    --mc-accent: #a5b4fc;
+    --mc-icon: rgb(255 255 255 / 0.07);
+    --mc-line: rgb(255 255 255 / 0.15);
+    --mc-stat: #34d399;
+    --mc-dot: rgb(52 211 153 / 0.75);
+    --mc-dot-glow: rgb(52 211 153 / 0.35);
+    --scan: rgb(255 255 255 / 0.035);
+  }
+
   /* 34 columnas: 477 puntos = 14 filas; los puntos se "encienden" de izquierda a derecha al entrar en pantalla */
   .mc-dots {
     grid-template-columns: repeat(34, minmax(0, 1fr));
@@ -139,8 +171,8 @@ const dots = Math.round(mc.stat.value / 10 / COLS) * COLS;
   .mc-dot {
     aspect-ratio: 1;
     border-radius: 9999px;
-    background: rgb(52 211 153 / 0.75);
-    box-shadow: 0 0 6px rgb(52 211 153 / 0.35);
+    background: var(--mc-dot);
+    box-shadow: 0 0 6px var(--mc-dot-glow);
   }
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
@@ -160,7 +192,8 @@ const dots = Math.round(mc.stat.value / 10 / COLS) * COLS;
     }
   }
 
-  .mc-aurora {
+  /* En oscuro la aurora del tile sube de intensidad; en claro usa los valores por defecto del componente */
+  :global([data-theme='dark']) .mc-aurora {
     --a-indigo: rgb(99 102 241 / 0.5);
     --a-violet: rgb(79 70 229 / 0.45);
     --a-mint: rgb(16 185 129 / 0.2);

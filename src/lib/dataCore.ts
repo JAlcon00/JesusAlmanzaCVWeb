@@ -19,6 +19,7 @@ import {
  *   1. Nube caótica     -> datos crudos del ERP          (hero, perfil)
  *   2. Cubo ordenado    -> data warehouse                (proyectos, experiencia)
  *   3. Gráfica de barras -> decisiones                    (formación, contacto)
+ * Brilla en ambos temas con una capa de halo detrás de los puntos (aditiva en oscuro, aura normal en claro).
  * El objeto rota con el progreso del scroll. Leemos scrollY dentro del bucle de render
  * (no hay listener de scroll). Con prefers-reduced-motion se dibuja una sola vez, quieto.
  */
@@ -132,6 +133,21 @@ function dotTexture(): CanvasTexture {
   return new CanvasTexture(c);
 }
 
+// Halo: degradado amplio y tenue. Dibujado detrás de cada punto crea el brillo sin post-procesado.
+function glowTexture(): CanvasTexture {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d')!;
+  const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, 'rgba(255,255,255,0.55)');
+  grad.addColorStop(0.25, 'rgba(255,255,255,0.28)');
+  grad.addColorStop(0.6, 'rgba(255,255,255,0.07)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  return new CanvasTexture(c);
+}
+
 const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
   return t * t * (3 - 2 * t);
@@ -156,8 +172,9 @@ export function startDataCore(canvas: HTMLCanvasElement): () => void {
   geometry.setAttribute('position', new BufferAttribute(positions, 3));
   geometry.setAttribute('color', new BufferAttribute(colors, 3));
 
+  const coreSize = small ? 0.045 : 0.058;
   const material = new PointsMaterial({
-    size: small ? 0.045 : 0.058,
+    size: coreSize,
     map: dotTexture(),
     vertexColors: true,
     transparent: true,
@@ -165,9 +182,24 @@ export function startDataCore(canvas: HTMLCanvasElement): () => void {
     sizeAttenuation: true,
   });
 
+  // Capa de brillo: mismas partículas (misma geometría, sin memoria extra), más grandes y difusas, detrás de los puntos
+  const glowMaterial = new PointsMaterial({
+    size: coreSize * 3.4,
+    map: glowTexture(),
+    vertexColors: true,
+    transparent: true,
+    depthWrite: false,
+    sizeAttenuation: true,
+  });
+  const glowPoints = new Points(geometry, glowMaterial);
+  const corePoints = new Points(geometry, material);
+  glowPoints.renderOrder = 0;
+  corePoints.renderOrder = 1;
+
   const group = new Group();
-  group.add(new Points(geometry, material));
+  group.add(glowPoints, corePoints);
   scene.add(group);
+  let glowBase = 0;
 
   // Paleta del sitio: índigo abajo -> menta arriba (los datos "suben" a decisiones)
   const low = new Color();
@@ -180,6 +212,11 @@ export function startDataCore(canvas: HTMLCanvasElement): () => void {
     material.blending = dark ? AdditiveBlending : NormalBlending;
     material.opacity = dark ? (small ? 0.32 : 0.95) : small ? 0.24 : 0.7;
     material.needsUpdate = true;
+    // Oscuro: el halo SUMA luz (resplandor). Claro: se mezcla normal y deja un aura de color alrededor de cada punto
+    glowMaterial.blending = dark ? AdditiveBlending : NormalBlending;
+    glowBase = dark ? (small ? 0.22 : 0.42) : small ? 0.14 : 0.26;
+    glowMaterial.opacity = glowBase;
+    glowMaterial.needsUpdate = true;
     lastMix = [-1, -1]; // fuerza recolorear
   };
 
@@ -262,6 +299,9 @@ export function startDataCore(canvas: HTMLCanvasElement): () => void {
     cur.tiltY += (pointer.x * 0.35 - cur.tiltY) * 0.05;
     group.rotation.set(cur.tiltX, cur.rot + cur.tiltY, 0);
 
+    // Pulso lento del brillo (~5 s por ciclo): el núcleo se siente "vivo" sin distraer
+    glowMaterial.opacity = glowBase * (0.82 + 0.18 * Math.sin((now - start) / 800));
+
     renderer.render(scene, camera);
     if (running) raf = requestAnimationFrame(frame);
   };
@@ -315,6 +355,8 @@ export function startDataCore(canvas: HTMLCanvasElement): () => void {
     geometry.dispose();
     material.map?.dispose();
     material.dispose();
+    glowMaterial.map?.dispose();
+    glowMaterial.dispose();
     renderer.dispose();
   };
 }

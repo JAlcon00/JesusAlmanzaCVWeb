@@ -476,3 +476,16 @@ body::after {
   transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Velo sobre el núcleo 3D en secciones con mucho texto a todo el ancho (legibilidad).
+   Queda debajo del contenido y de la aurora de la sección; los bordes se desvanecen para no marcar un corte. */
+.core-fog::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  background: var(--bg);
+  opacity: 0.88;
+  mask-image: linear-gradient(to bottom, transparent, black 14%, black 86%, transparent);
+}

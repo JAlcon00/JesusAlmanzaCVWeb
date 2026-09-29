@@ -86,9 +86,10 @@ Cada capa tiene un tope. Si una sección nueva necesita textura, reutiliza estas
 | Piso de retícula | `CyberGrid.astro`, perspectiva + `translateY` en loop | Solo hero (1 instancia) |
 | Aurora | `Aurora.astro` | Máx. 4 superficies (ver §6) |
 | Corchetes HUD | clase `.hud` | Máx. 3: diagrama del hero, demo de umbral, panel de contacto |
-| Scanlines CRT | clase `.scanlines` | Solo superficies navy (hoy: tile de MatchCount) |
+| Scanlines CRT | clase `.scanlines` (color en `--scan`) | Tile de MatchCount; muy tenues en claro, visibles en oscuro |
 | Borde iluminado | clase `.spotlight` + script en `Base.astro` (`--mx/--my`) | Tarjetas con borde; solo puntero fino |
 | Regla de datos | `DataRule.astro` | Máx. 2 entre secciones |
+| Velo sobre el núcleo 3D | clase `.core-fog` | Secciones con texto a todo el ancho (hoy: Stack) |
 | Riel de línea de tiempo | `.exp-rail` en `Experience.astro` | Solo Experiencia; nodo menta = puesto actual (estado real) |
 | Eyebrow que se decodifica | `[data-decode]` en `Hero.astro` | Solo el eyebrow del hero, una vez al cargar |
 

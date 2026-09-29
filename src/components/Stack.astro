@@ -18,7 +18,7 @@ const groupIcons = { code: Code, brain: Brain, database: Database, stack: StackI
 const withLogo = stack.flatMap((g) => g.items).filter((t) => t.logo);
 ---
 
-<section id={c.ids.stack} aria-labelledby="stack-title" class="relative isolate overflow-clip py-20 md:py-28">
+<section id={c.ids.stack} aria-labelledby="stack-title" class="core-fog relative isolate overflow-clip py-20 md:py-28">
   <Aurora variant="band" />
   <div class="container-page">
     <h2
@@ -53,16 +53,16 @@ const withLogo = stack.flatMap((g) => g.items).filter((t) => t.logo);
   </div>
 
   <div class="container-page">
-    <div class="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-2 md:mt-16 lg:grid-cols-5 lg:gap-8">
-      {stack.map((group) => {
+    <div class="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-6 md:mt-16 lg:grid-cols-5 lg:gap-8">
+      {stack.map((group, i) => {
         const GroupIcon = groupIcons[group.icon as keyof typeof groupIcons] ?? Code;
         return (
-          <div class="reveal">
+          <div class:list={['reveal lg:col-span-1', i < 3 ? 'sm:col-span-2' : 'sm:col-span-3']}>
             <h3 class="flex items-center gap-2.5 font-medium">
               <GroupIcon size={22} weight="duotone" aria-hidden="true" className="text-accent-ink" />
               {group.label}
             </h3>
-            <ul class="mt-5 flex flex-col gap-3">
+            <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-1">
               {group.items.map((t) => (
                 <li class="flex items-center gap-2.5 text-sm text-muted">
                   <TechLogo tech={t} size={16} class="shrink-0 text-ink/70" />
