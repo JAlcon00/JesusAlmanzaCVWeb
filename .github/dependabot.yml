@@ -9,6 +9,11 @@ updates:
     groups:
       dependencies:
         patterns: ['*']
+    ignore:
+      # @astrojs/check solo acepta TypeScript ^5 || ^6 (peerDependency). Un salto mayor rompe `npm ci`.
+      # Quitar esta regla cuando @astrojs/check publique soporte para TypeScript 7.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
 
   # Versiones de las GitHub Actions del flujo de CI
   - package-ecosystem: github-actions

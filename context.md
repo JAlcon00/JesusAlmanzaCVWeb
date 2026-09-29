@@ -113,7 +113,7 @@ npm run format:check   # lo mismo sin escribir (lo usa CI)
 
 - Repositorio: https://github.com/JAlcon00/JesusAlmanzaCVWeb (rama `main`).
 - CI (`.github/workflows/ci.yml`): `npm ci` + `format:check` + `build` en cada push y PR. Si falla el formato, correr `npm run format` antes de subir.
-- Dependabot (`.github/dependabot.yml`): npm semanal agrupado, Actions mensual.
+- Dependabot (`.github/dependabot.yml`): npm semanal agrupado, Actions mensual. Ignora saltos mayores de TypeScript: `@astrojs/check` solo acepta TS ^5 || ^6 y un TS 7 rompe `npm ci` (pasó el 2026-09-28 en el primer PR de Dependabot).
 - Licencia: todos los derechos reservados (`LICENSE`, `"license": "UNLICENSED"` en package.json).
 - No se suben (ver `.gitignore`): `.claude/`, la foto original sin recortar y la copia del CV en la raíz.
 
